@@ -1,1 +1,142 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slot Game - MemeCoin Hub</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      text-align: center;
+    }
+
+    header {
+      padding: 20px;
+      background: #111;
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+
+    #game {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .reel {
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 10px;
+      font-size: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .controls {
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #ffcc00;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ffaa00;
+    }
+
+    #sol-balance, #bet-amount {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>🎰 MemeCoin Slot Game</header>
+
+  <div id="sol-balance">Oefenbalans: ◎ 1000.00</div>
+  <div id="bet-amount">Inzet: ◎ <span id="bet">10</span></div>
+
+  <div class="controls">
+    <button onclick="decreaseBet()">➖ Verlaag inzet</button>
+    <button onclick="increaseBet()">➕ Verhoog inzet</button>
+    <button onclick="spin()">🎰 Spin (oefengeld)</button>
+  </div>
+
+  <div id="game">
+    <div class="reel">🍒</div>
+    <div class="reel">🍋</div>
+    <div class="reel">🍇</div>
+    <div class="reel">🍋</div>
+    <div class="reel">🍇</div>
+    <div class="reel">🍒</div>
+    <div class="reel">🍇</div>
+    <div class="reel">🍒</div>
+    <div class="reel">🍋</div>
+  </div>
+
+  <script>
+    const symbols = ['🍒', '🍋', '🍇', '🔔', '💎', '7️⃣'];
+    let balance = 1000;
+    let bet = 10;
+
+    function spin() {
+      if (balance < bet) {
+        alert('Niet genoeg saldo!');
+        return;
+      }
+      balance -= bet;
+      document.getElementById('sol-balance').textContent = `Oefenbalans: ◎ ${balance.toFixed(2)}`;
+
+      const reels = document.querySelectorAll('.reel');
+      reels.forEach(reel => {
+        const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+        reel.textContent = randomSymbol;
+      });
+
+      // Simpele winregel op middenlijn
+      const result = [
+        reels[3].textContent,
+        reels[4].textContent,
+        reels[5].textContent,
+      ];
+
+      if (result.every(s => s === result[0])) {
+        const win = bet * 10;
+        balance += win;
+        alert(`🎉 Je hebt gewonnen: ◎ ${win}!`);
+        document.getElementById('sol-balance').textContent = `Oefenbalans: ◎ ${balance.toFixed(2)}`;
+      }
+    }
+
+    function increaseBet() {
+      bet += 5;
+      document.getElementById('bet').textContent = bet;
+    }
+
+    function decreaseBet() {
+      if (bet > 5) {
+        bet -= 5;
+        document.getElementById('bet').textContent = bet;
+      }
+    }
+  </script>
+</body>
+</html>
 
