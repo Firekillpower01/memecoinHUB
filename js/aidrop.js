@@ -14,3 +14,4 @@ export function claimAirdrop() {
   updateBalanceDisplay();
   showTemporaryAlert(`🎁 Je hebt ${CONFIG.AIRDROP_AMOUNT} ${CONFIG.TOKEN_NAME} ontvangen!`);
 }
+
