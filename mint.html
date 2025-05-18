@@ -2,99 +2,134 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Token Mint | MemeCoin Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🪙 MemeCoin Mint</title>
   <style>
     body {
       margin: 0;
       padding: 0;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
       font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #2c3e50, #4ca1af);
       color: white;
       text-align: center;
     }
 
     header {
-      padding: 30px;
+      padding: 20px;
       background: #111;
       font-size: 2em;
       font-weight: bold;
-      color: #00ffcc;
+      color: #00ff88;
     }
 
-    main {
-      padding: 40px;
+    nav {
+      margin: 20px;
     }
 
-    form {
-      background: rgba(0, 0, 0, 0.3);
-      display: inline-block;
-      padding: 30px;
-      border-radius: 12px;
-    }
-
-    input, select {
-      padding: 10px;
-      margin: 10px 0;
-      width: 250px;
-      border-radius: 6px;
-      border: none;
-      font-size: 1em;
-    }
-
-    button {
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 10px;
       padding: 10px 20px;
-      background-color: #00ffcc;
-      color: black;
-      border: none;
+      background: #00ff88;
+      border-radius: 5px;
       font-weight: bold;
-      font-size: 1em;
-      border-radius: 6px;
+    }
+
+    nav a:hover {
+      background: #00cc6a;
+    }
+
+    .mint-card {
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 40px auto;
+      max-width: 600px;
+    }
+
+    .mint-card button {
+      background: #00ff88;
+      color: black;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #00ccaa;
+    .mint-card button:hover {
+      background: #00cc6a;
+    }
+
+    #mint-message, #wallet-info, #live-balance {
+      font-size: 1.2em;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <header>MemeCoin Minter</header>
+  <header>🪙 MemeCoin Mint</header>
 
-  <main>
-    <h2>Mint je eigen MemeCoin</h2>
-    <form id="mintForm">
-      <div>
-        <input type="text" id="tokenName" placeholder="Token Naam" required />
-      </div>
-      <div>
-        <input type="text" id="tokenSymbol" placeholder="Token Symbool (bv. $MOON)" required />
-      </div>
-      <div>
-        <input type="number" id="tokenSupply" placeholder="Totale Supply" required />
-      </div>
-      <div>
-        <button type="submit">Mint Token</button>
-      </div>
-    </form>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="mint.html">🪙 Mint</a>
+    <a href="airdrop.html">🎁 Airdrops</a>
+    <a href="slots.html">🎰 Slots</a>
+  </nav>
 
-    <p id="status"></p>
+  <main class="mint-card">
+    <h3>Mint je eigen $MEME tokens</h3>
+    <button onclick="mintTokens()">🪙 Mint Tokens</button>
+    <div id="mint-message"></div>
+
+    <div style="margin-top: 30px">
+      <button onclick="connectPhantom()">🔗 Connect Phantom</button>
+      <div id="wallet-info"></div>
+      <div id="live-balance"></div>
+    </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
-    const mintForm = document.getElementById('mintForm');
-    const statusText = document.getElementById('status');
+    let userMinted = false;
+    let mintAmount = 100;
 
-    mintForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('tokenName').value;
-      const symbol = document.getElementById('tokenSymbol').value;
-      const supply = document.getElementById('tokenSupply').value;
+    function mintTokens() {
+      if (userMinted) {
+        document.getElementById("mint-message").textContent = "❌ Je hebt al gemint.";
+        return;
+      }
 
-      // Placeholder actie - API/web3 logica moet hier komen
-      statusText.textContent = `Mintverzoek verzonden voor ${name} (${symbol}) met supply van ${supply} tokens.`;
-    });
+      if (window.solana && window.solana.isPhantom) {
+        window.solana.connect().then(res => {
+          const pubKey = res.publicKey.toString();
+          userMinted = true;
+          confetti();
+          document.getElementById("mint-message").textContent = `✅ ${mintAmount} $MEME tokens succesvol gemint voor ${pubKey}`;
+          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${mintAmount}`;
+        }).catch(err => {
+          document.getElementById("mint-message").textContent = "❌ Verbinden mislukt: " + err.message;
+        });
+      } else {
+        document.getElementById("mint-message").textContent = "⚠️ Phantom Wallet niet gevonden.";
+      }
+    }
+
+    function connectPhantom() {
+      if (window.solana && window.solana.isPhantom) {
+        window.solana.connect().then(res => {
+          const pubKey = res.publicKey.toString();
+          document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
+          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${userMinted ? mintAmount : 0}`;
+        }).catch(err => {
+          alert("❌ Verbinden mislukt: " + err.message);
+        });
+      } else {
+        alert("⚠️ Phantom Wallet is niet gevonden.");
+      }
+    }
   </script>
 </body>
 </html>
-
