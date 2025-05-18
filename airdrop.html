@@ -17,13 +17,13 @@
   </nav>
 
   <main>
-    <button onclick="connectPhantom()">🔗 Connect Phantom</button>
+    <button id="connect-btn">🔗 Connect Phantom</button>
     <div id="wallet-info"></div>
     <div id="live-balance"></div>
 
     <hr style="margin: 30px 0; border-color: #00ffd5;">
 
-    <button onclick="claimAirdrop()">🎁 Claim 50 $MEME</button>
+    <button id="airdrop-btn">🎁 Claim 50 $MEME</button>
     <div id="airdrop-message"></div>
   </main>
 
@@ -31,9 +31,9 @@
     import { connectPhantom } from './js/main.js';
     import { claimAirdrop } from './js/airdrop.js';
 
-    // Toegankelijk maken in global scope
-    window.connectPhantom = connectPhantom;
-    window.claimAirdrop = claimAirdrop;
+    // Koppel functies aan knoppen
+    document.getElementById('connect-btn').addEventListener('click', connectPhantom);
+    document.getElementById('airdrop-btn').addEventListener('click', claimAirdrop);
   </script>
 </body>
 </html>
