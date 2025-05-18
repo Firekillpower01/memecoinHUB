@@ -105,6 +105,17 @@
     .wallet-buttons button:hover {
       background: #666;
     }
+
+    #balance-display {
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+
+    #win-display {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #00ff88;
+    }
   </style>
 </head>
 <body>
@@ -119,6 +130,8 @@
 
   <main id="game-area">
     <div id="bet-display">Inzet: <span id="current-bet">1</span> $MEME</div>
+    <div id="balance-display">Balans: <span id="current-balance">100</span> $MEME</div>
+    <div id="win-display">Winst: 0</div>
 
     <div class="controls">
       <button onclick="changeBet(-1)">➖ Verlaag Inzet</button>
@@ -149,14 +162,18 @@
   </main>
 <script>
   const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐", "🔔", "🍀", "💎", "🔥", "🃏", "🎁"];
-  // 🃏 = Wild, 🎁 = Bonus
   let currentBet = 1;
   let balance = 100;
+
+  function updateUI() {
+    document.getElementById('current-bet').textContent = currentBet;
+    document.getElementById('current-balance').textContent = balance;
+  }
 
   function changeBet(amount) {
     currentBet += amount;
     if (currentBet < 1) currentBet = 1;
-    document.getElementById('current-bet').textContent = currentBet;
+    updateUI();
   }
 
   function getRandomSymbol() {
@@ -191,6 +208,7 @@
     ];
 
     let totalWin = 0;
+    let bonusRound = false;
 
     rows.forEach((row, index) => {
       if (row.every(sym => sym === row[0])) {
@@ -202,18 +220,22 @@
       }
     });
 
-    if (symbols.includes("🎁")) {
-      totalWin += currentBet * 3; // bonus symbool aanwezig
-      alert("🎁 Bonus symbool! Extra winst toegevoegd.");
+    const bonusCount = symbols.filter(s => s === "🎁").length;
+    if (bonusCount >= 2) {
+      bonusRound = true;
+      totalWin += bonusCount * currentBet * 2;
+      alert(`🎁 BONUSRONDE! Je hebt ${bonusCount} bonussymbolen.`);
     }
 
     if (totalWin > 0) {
       balance += totalWin;
-      alert(`🎉 Je wint ${totalWin} $MEME! Totaal balans: ${balance}`);
+      document.getElementById('win-display').textContent = `Winst: ${totalWin} $MEME`;
     } else {
       balance -= currentBet;
-      alert(`😢 Geen winst. Huidige balans: ${balance}`);
+      document.getElementById('win-display').textContent = `Winst: 0`;
     }
+
+    updateUI();
   }
 
   function highlightRow(rowIndex) {
