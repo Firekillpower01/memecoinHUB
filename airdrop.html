@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MemeCoin Airdrop</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #1f4037, #99f2c8);
+      color: #333;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+    }
+
+    header {
+      padding: 30px;
+      background: #111;
+      font-size: 2em;
+      font-weight: bold;
+      color: #00ffc8;
+    }
+
+    main {
+      padding: 40px;
+    }
+
+    .form-section {
+      max-width: 500px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    input[type="text"], input[type="email"], textarea {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: #00ffc8;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #00cc9c;
+    }
+  </style>
+</head>
+<body>
+  <header>🎁 Airdrop Claim</header>
+
+  <main>
+    <div class="form-section">
+      <h2>Claim jouw gratis MemeCoin</h2>
+      <p>Vul je Solana walletadres in om deel te nemen aan de airdrop.</p>
+      <form id="airdrop-form">
+        <input type="text" id="wallet" placeholder="Jouw Solana walletadres" required />
+        <input type="email" id="email" placeholder="E-mailadres voor updates (optioneel)" />
+        <button type="submit">Claim Airdrop</button>
+      </form>
+      <p id="confirmation" style="margin-top: 20px; font-weight: bold;"></p>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('airdrop-form');
+    const confirmation = document.getElementById('confirmation');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const wallet = document.getElementById('wallet').value;
+      confirmation.textContent = `✅ Airdrop geregistreerd voor wallet: ${wallet}`;
+      form.reset();
+    });
+  </script>
+</body>
+</html>
 
