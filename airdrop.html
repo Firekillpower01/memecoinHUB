@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/slots.css" />
 </head>
 <body>
-  <header>🎁 Claim je gratis $MEME</header>
+  <header>🎁 Claim je $MEME Airdrop</header>
 
   <nav>
     <a href="index.html">🏠 Home</a>
@@ -17,25 +17,24 @@
   </nav>
 
   <main>
-    <div class="airdrop-container">
-      <p>📢 Ontvang gratis $MEME tokens en start met spelen!</p>
+    <section class="wallet-info">
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
-      <button onclick="claimAirdrop()">🎁 Claim Airdrop</button>
-      <div id="airdrop-message"></div>
       <div id="wallet-info"></div>
       <div id="live-balance"></div>
-    </div>
+    </section>
+
+    <section class="airdrop-section">
+      <button id="airdrop-button">🎁 Claim Airdrop</button>
+      <div id="airdrop-message"></div>
+    </section>
   </main>
 
-  <!-- JavaScript modules -->
   <script type="module">
     import { connectPhantom } from './js/wallet.js';
     import { claimAirdrop } from './js/airdrop.js';
 
-    window.addEventListener('DOMContentLoaded', () => {
-      window.connectPhantom = connectPhantom;
-      window.claimAirdrop = claimAirdrop;
-    });
+    window.connectPhantom = connectPhantom;
+    document.getElementById('airdrop-button').addEventListener('click', claimAirdrop);
   </script>
 </body>
 </html>
