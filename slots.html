@@ -41,7 +41,7 @@
       border-radius: 10px;
       padding: 20px;
       margin: 20px auto;
-      max-width: 500px;
+      max-width: 600px;
     }
     button {
       background: #00ffd5;
@@ -56,18 +56,27 @@
     button:hover {
       background: #00bfae;
     }
-    #slot-result {
-      font-size: 1.2em;
-      margin-top: 10px;
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(5, 60px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
     }
-    #live-balance, #wallet-info, #last-win {
+    .slot-cell {
+      background: #000;
+      border: 2px solid #00ffd5;
+      border-radius: 10px;
+      font-size: 2em;
+      padding: 15px;
+    }
+    #slot-result, #live-balance, #wallet-info, #last-win {
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
   <header>🎰 PUMP RAIDERS - Slots</header>
-
   <nav>
     <a href="index.html">🏠 Home</a>
     <a href="mint.html">🪙 Mint</a>
@@ -78,6 +87,13 @@
   <main>
     <div class="card">
       <h3>Spin & Win $MEME tokens</h3>
+      <div class="slots" id="slot-grid">
+        <div class="slot-cell">❓</div>
+        <div class="slot-cell">❓</div>
+        <div class="slot-cell">❓</div>
+        <div class="slot-cell">❓</div>
+        <div class="slot-cell">❓</div>
+      </div>
       <button onclick="spinSlot()">🎰 Spin</button>
       <div id="slot-result"></div>
       <div id="last-win"></div>
@@ -95,16 +111,34 @@
   <script>
     let memeBalance = 0;
     let lastWin = 0;
+    const symbols = ['🍒', '💎', '🍋', '🔔', '⭐'];
 
     function spinSlot() {
       if (window.solana && window.solana.isPhantom) {
         window.solana.connect().then(res => {
-          const won = Math.floor(Math.random() * 150);
-          memeBalance += won;
-          lastWin = won;
-          confetti();
-          document.getElementById("slot-result").textContent = `🎉 Je hebt ${won} $MEME tokens gewonnen!`;
-          document.getElementById("last-win").textContent = `🏆 Laatste winst: ${won} $MEME`;
+          const grid = document.getElementById("slot-grid").children;
+          let resultSymbols = [];
+          for (let i = 0; i < grid.length; i++) {
+            const symbol = symbols[Math.floor(Math.random() * symbols.length)];
+            grid[i].textContent = symbol;
+            resultSymbols.push(symbol);
+          }
+          let win = 0;
+          const count = {};
+          resultSymbols.forEach(s => count[s] = (count[s] || 0) + 1);
+          for (const sym in count) {
+            if (count[sym] >= 3) {
+              win = count[sym] * 50;
+              break;
+            }
+          }
+          memeBalance += win;
+          lastWin = win;
+          if (win > 0) confetti();
+          document.getElementById("slot-result").textContent = win > 0
+            ? `🎉 Je hebt ${win} $MEME tokens gewonnen!`
+            : `😅 Geen winst deze keer. Probeer opnieuw!`;
+          document.getElementById("last-win").textContent = `🏆 Laatste winst: ${lastWin} $MEME`;
           document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
         });
       } else {
