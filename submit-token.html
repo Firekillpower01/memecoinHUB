@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit MemeCoin</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #141e30, #243b55);
+      color: white;
+      text-align: center;
+    }
+
+    header {
+      padding: 30px;
+      background: #111;
+      font-size: 2em;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+
+    nav {
+      margin: 20px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 10px;
+      padding: 10px 20px;
+      background: #ffcc00;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      background: #ffaa00;
+    }
+
+    main {
+      padding: 40px;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      margin: 0 auto;
+      max-width: 600px;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      background: #ffcc00;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1em;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ffaa00;
+    }
+
+    .confirmation {
+      margin-top: 30px;
+      font-weight: bold;
+      color: #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <header>📬 Submit MemeCoin</header>
+
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="slots.html">🎰 Slot Game</a>
+    <a href="mint.html">🪙 Token Mint</a>
+    <a href="airdrop.html">🎁 Airdrops</a>
+  </nav>
+
+  <main>
+    <h2>Dien jouw MemeCoin project in</h2>
+    <p>Wil jij jouw token toevoegen aan onze hub? Vul het formulier hieronder in:</p>
+
+    <form id="submit-form">
+      <label for="project-name">Projectnaam</label>
+      <input type="text" id="project-name" name="project-name" required />
+
+      <label for="mint-address">Mint Address</label>
+      <input type="text" id="mint-address" name="mint-address" required />
+
+      <label for="website">Website (optioneel)</label>
+      <input type="url" id="website" name="website" />
+
+      <label for="description">Beschrijving</label>
+      <textarea id="description" name="description" rows="5" required></textarea>
+
+      <button type="submit">✅ Verzenden</button>
+    </form>
+
+    <div class="confirmation" id="confirmation-message" style="display: none;">
+      ✅ Dank je wel! Je project is ontvangen.
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('submit-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      document.getElementById('confirmation-message').style.display = 'block';
+      this.reset();
+    });
+  </script>
+</body>
+</html>
 
