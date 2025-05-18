@@ -1,1 +1,100 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Token Mint | MemeCoin Hub</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #2c3e50, #4ca1af);
+      color: white;
+      text-align: center;
+    }
+
+    header {
+      padding: 30px;
+      background: #111;
+      font-size: 2em;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+
+    main {
+      padding: 40px;
+    }
+
+    form {
+      background: rgba(0, 0, 0, 0.3);
+      display: inline-block;
+      padding: 30px;
+      border-radius: 12px;
+    }
+
+    input, select {
+      padding: 10px;
+      margin: 10px 0;
+      width: 250px;
+      border-radius: 6px;
+      border: none;
+      font-size: 1em;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #00ffcc;
+      color: black;
+      border: none;
+      font-weight: bold;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00ccaa;
+    }
+  </style>
+</head>
+<body>
+  <header>MemeCoin Minter</header>
+
+  <main>
+    <h2>Mint je eigen MemeCoin</h2>
+    <form id="mintForm">
+      <div>
+        <input type="text" id="tokenName" placeholder="Token Naam" required />
+      </div>
+      <div>
+        <input type="text" id="tokenSymbol" placeholder="Token Symbool (bv. $MOON)" required />
+      </div>
+      <div>
+        <input type="number" id="tokenSupply" placeholder="Totale Supply" required />
+      </div>
+      <div>
+        <button type="submit">Mint Token</button>
+      </div>
+    </form>
+
+    <p id="status"></p>
+  </main>
+
+  <script>
+    const mintForm = document.getElementById('mintForm');
+    const statusText = document.getElementById('status');
+
+    mintForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('tokenName').value;
+      const symbol = document.getElementById('tokenSymbol').value;
+      const supply = document.getElementById('tokenSupply').value;
+
+      // Placeholder actie - API/web3 logica moet hier komen
+      statusText.textContent = `Mintverzoek verzonden voor ${name} (${symbol}) met supply van ${supply} tokens.`;
+    });
+  </script>
+</body>
+</html>
 
