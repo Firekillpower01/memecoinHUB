@@ -50,3 +50,14 @@ function updateReelsDisplay(reels) {
     if (reel) reel.textContent = reels[i];
   }
 }
+// Animatie voor draaiende reels
+function animateReels(reelElements) {
+  reelElements.forEach(reel => {
+    reel.classList.add("spin");
+
+    // Verwijder de animatieklasse na de duur van de animatie
+    setTimeout(() => {
+      reel.classList.remove("spin");
+    }, 600); // duur moet matchen met de CSS animatie
+  });
+}
