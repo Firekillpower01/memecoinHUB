@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎰 PUMP RAIDERS - Slots</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>🎰 PUMP RAIDERS Slots</title>
+  <link rel="stylesheet" href="css/slots.css" />
 </head>
 <body>
-  <header>🎰 PUMP RAIDERS - Slots</header>
+  <header>🎰 PUMP RAIDERS Slots</header>
+
   <nav>
     <a href="index.html">🏠 Home</a>
     <a href="mint.html">🪙 Mint</a>
@@ -16,29 +17,31 @@
   </nav>
 
   <main>
-    <div class="card">
-      <h3>Spin & Win $MEME tokens</h3>
-      <div class="slots" id="slot-grid">
-        <div class="slot-cell">❓</div>
-        <div class="slot-cell">❓</div>
-        <div class="slot-cell">❓</div>
-        <div class="slot-cell">❓</div>
-        <div class="slot-cell">❓</div>
+    <div class="slot-machine">
+      <div class="reels">
+        <div id="reel-0" class="reel">❓</div>
+        <div id="reel-1" class="reel">❓</div>
+        <div id="reel-2" class="reel">❓</div>
       </div>
-      <button onclick="spinSlot()">🎰 Spin</button>
-      <div id="slot-result"></div>
-      <div id="last-win"></div>
+      <button onclick="spinSlots()">🎰 Spin</button>
+      <div id="slot-message"></div>
     </div>
 
-    <div class="card">
-      <h3>Connect je wallet</h3>
+    <div class="wallet-info">
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
       <div id="wallet-info"></div>
       <div id="live-balance"></div>
     </div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="js/slots.js"></script>
+  <!-- JavaScript modules -->
+  <script type="module">
+    import { spinSlots } from './js/slots.js';
+    import { connectPhantom } from './js/wallet.js';
+
+    // Toegankelijk maken in global scope voor onclick attributen
+    window.spinSlots = spinSlots;
+    window.connectPhantom = connectPhantom;
+  </script>
 </body>
 </html>
