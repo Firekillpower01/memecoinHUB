@@ -1,3 +1,5 @@
+/* css/style.css */
+
 body {
   margin: 0;
   padding: 0;
@@ -27,6 +29,7 @@ nav a {
   background: #00ffd5;
   border-radius: 5px;
   font-weight: bold;
+  transition: background 0.3s;
 }
 
 nav a:hover {
@@ -51,6 +54,7 @@ button {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 10px;
+  transition: background 0.3s;
 }
 
 button:hover {
@@ -60,20 +64,28 @@ button:hover {
 .slots {
   display: flex;
   justify-content: center;
-  gap: 10px;
   margin: 20px 0;
 }
 
 .slot-cell {
-  font-size: 2em;
-  background: #333;
-  border: 2px solid #555;
-  border-radius: 10px;
-  padding: 20px;
   width: 60px;
   height: 60px;
+  background: #000;
+  color: #00ffd5;
+  font-size: 2em;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 5px;
+  border-radius: 10px;
+  border: 2px solid #444;
+  box-shadow: 0 0 10px #00ffd5aa;
 }
 
+#slot-result,
+#last-win,
+#wallet-info,
+#live-balance {
+  margin-top: 10px;
+  font-size: 1.1em;
+}
