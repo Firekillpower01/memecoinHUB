@@ -1,50 +1,52 @@
 // js/slots.js
 
-const symbols = ["🍒", "🍋", "🔔", "⭐", "💎", "🃏"];
-let memeBalance = 0;
+import { state } from './state.js';
+import { config } from './config.js';
+import { updateBalanceDisplay, showTemporaryAlert } from './ui.js';
 
-function spinSlot() {
-  const slotGrid = document.getElementById("slot-grid");
-  const result = document.getElementById("slot-result");
-  const lastWin = document.getElementById("last-win");
-  result.textContent = "";
-  lastWin.textContent = "";
+const symbols = ["🍒", "🍋", "🔔", "⭐", "💎", "7️⃣", "🍀"];
+let isSpinning = false;
 
-  const spinResult = [];
-  const cells = slotGrid.querySelectorAll(".slot-cell");
-
-  cells.forEach((cell, index) => {
-    const randSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-    cell.textContent = randSymbol;
-    spinResult.push(randSymbol);
-  });
-
-  // Check win condition (3+ in a row from the start)
-  const first = spinResult[0];
-  let matchCount = 1;
-  for (let i = 1; i < spinResult.length; i++) {
-    if (spinResult[i] === first) {
-      matchCount++;
-    } else {
-      break;
-    }
+export function spinSlots() {
+  if (isSpinning) return;
+  if (state.memeBalance < config.spinCost) {
+    showTemporaryAlert("❌ Niet genoeg $MEME tokens om te spinnen.");
+    return;
   }
 
-  if (matchCount >= 3) {
-    const winAmount = matchCount * 20;
-    memeBalance += winAmount;
-    result.textContent = `🎉 Gewonnen: ${winAmount} $MEME!`;
-    lastWin.textContent = `✨ Symbolen op rij: ${matchCount} x ${first}`;
-    confetti();
-    updateBalance();
+  isSpinning = true;
+  state.memeBalance -= config.spinCost;
+  updateBalanceDisplay();
+
+  const reels = [
+    getRandomSymbol(),
+    getRandomSymbol(),
+    getRandomSymbol()
+  ];
+
+  updateReelsDisplay(reels);
+
+  const isWin = reels.every(sym => sym === reels[0]);
+  if (isWin) {
+    const winnings = config.winReward;
+    state.memeBalance += winnings;
+    showTemporaryAlert(`🎉 Gewonnen! ${winnings} $MEME tokens!`);
   } else {
-    result.textContent = "❌ Geen winst, probeer opnieuw!";
+    showTemporaryAlert("😢 Geen winst, probeer opnieuw.");
   }
-} 
 
-function updateBalance() {
-  const balanceEl = document.getElementById("live-balance");
-  if (balanceEl) {
-    balanceEl.textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
+  updateBalanceDisplay();
+  isSpinning = false;
+}
+
+function getRandomSymbol() {
+  const index = Math.floor(Math.random() * symbols.length);
+  return symbols[index];
+}
+
+function updateReelsDisplay(reels) {
+  for (let i = 0; i < reels.length; i++) {
+    const reel = document.getElementById(`reel-${i}`);
+    if (reel) reel.textContent = reels[i];
   }
 }
