@@ -142,42 +142,102 @@
       <button onclick="connectMetaMask()">🦊 Connect MetaMask</button>
     </div>
   </main>
+<script>
+  const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐", "🔔", "🍀", "💎", "🔥"];
+  let currentBet = 1;
 
-  <script>
-    let currentBet = 1;
+  function changeBet(amount) {
+    currentBet += amount;
+    if (currentBet < 1) currentBet = 1;
+    document.getElementById('current-bet').textContent = currentBet;
+  }
 
-    function changeBet(amount) {
-      currentBet += amount;
-      if (currentBet < 1) currentBet = 1;
-      document.getElementById('current-bet').textContent = currentBet;
+  function getRandomSymbol() {
+    return symbols[Math.floor(Math.random() * symbols.length)];
+  }
+
+  function spin() {
+    const reels = document.querySelectorAll(".symbol");
+
+    // Reset eventuele oude win effecten
+    reels.forEach(el => {
+      el.classList.remove("win");
+      el.style.animation = "";
+    });
+
+    // Simuleer draai-animatie (visueel effect met vertraging)
+    let result = [];
+    for (let i = 0; i < reels.length; i++) {
+      (function(i) {
+        setTimeout(() => {
+          const sym = getRandomSymbol();
+          reels[i].textContent = sym;
+          result[i] = sym;
+
+          // Als laatste symbool is gezet, controleer op winst
+          if (i === reels.length - 1) {
+            checkWin(result);
+          }
+        }, i * 150); // 150ms vertraging per symbool
+      })(i);
     }
+  }
 
-    function spin() {
-      alert(`Je draait met een inzet van ${currentBet} $MEME`);
-      // hier komt de spinscript straks
-    }
+  function checkWin(symbols) {
+    // 3 rijen → elk met 3 symbolen
+    const rows = [
+      [symbols[0], symbols[1], symbols[2]],
+      [symbols[3], symbols[4], symbols[5]],
+      [symbols[6], symbols[7], symbols[8]],
+    ];
 
-    function connectPhantom() {
-      if (window.solana && window.solana.isPhantom) {
-        window.solana.connect().then(res => {
-          alert("✅ Verbonden met Phantom wallet: " + res.publicKey.toString());
-        }).catch(err => {
-          alert("❌ Verbinden mislukt: " + err.message);
-        });
-      } else {
-        alert("⚠️ Phantom Wallet is niet gevonden.");
+    let win = false;
+
+    rows.forEach((row, index) => {
+      if (row[0] === row[1] && row[1] === row[2]) {
+        win = true;
+        // Highlight winnende rij
+        for (let i = 0; i < 3; i++) {
+          const reelIndex = index * 3 + i;
+          const reel = document.querySelectorAll(".symbol")[reelIndex];
+          reel.style.animation = "blink 1s ease-in-out infinite alternate";
+        }
       }
-    }
+    });
 
-    function connectMetaMask() {
-      if (typeof window.ethereum !== 'undefined') {
-        window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
-          alert("✅ Verbonden met MetaMask: " + accounts[0]);
-        }).catch(err => {
-          alert("❌ Verbinden mislukt: " + err.message);
-        });
-      } else {
-        alert("⚠️ MetaMask is niet geïnstalleerd.");
+    if (win) {
+      alert(`🎉 Je wint ${currentBet * 10} $MEME!`);
+    } else {
+      alert("😢 Geen winst, probeer opnieuw!");
+    }
+  }
+
+  // Phantom & MetaMask connect (gelijk aan eerder)
+  function connectPhantom() {
+    if (window.solana && window.solana.isPhantom) {
+      window.solana.connect().then(res => {
+        alert("✅ Verbonden met Phantom wallet: " + res.publicKey.toString());
+      }).catch(err => {
+        alert("❌ Verbinden mislukt: " + err.message);
+      });
+    } else {
+      alert("⚠️ Phantom Wallet is niet gevonden.");
+    }
+  }
+
+  function connectMetaMask() {
+    if (typeof window.ethereum !== 'undefined') {
+      window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+        alert("✅ Verbonden met MetaMask: " + accounts[0]);
+      }).catch(err => {
+        alert("❌ Verbinden mislukt: " + err.message);
+      });
+    } else {
+      alert("⚠️ MetaMask is niet geïnstalleerd.");
+    }
+  }
+</script>
+
       }
     }
   </script>
