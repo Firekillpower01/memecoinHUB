@@ -17,7 +17,7 @@
   </nav>
 
   <main>
-    <div class="slot-machine">
+    <div id="slot-machine" class="slot-machine">
       <div class="reels">
         <div id="reel-0" class="reel">❓</div>
         <div id="reel-1" class="reel">❓</div>
@@ -40,8 +40,10 @@
     import { connectPhantom } from './js/wallet.js';
 
     // Toegankelijk maken in global scope voor onclick attributen
-    window.spinSlots = spinSlots;
-    window.connectPhantom = connectPhantom;
+    window.addEventListener('DOMContentLoaded', () => {
+      window.spinSlots = spinSlots;
+      window.connectPhantom = connectPhantom;
+    });
   </script>
 </body>
 </html>
