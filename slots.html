@@ -1,42 +1,67 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slot Game</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎰 Slot Machine</title>
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      padding: 0;
+      background: linear-gradient(to bottom, #000428, #004e92);
+      font-family: Arial, sans-serif;
       color: white;
       text-align: center;
     }
 
-    h1 {
+    header {
+      padding: 20px;
+      background: #111;
+      font-size: 2em;
+      font-weight: bold;
       color: #ffcc00;
-      margin-top: 20px;
     }
 
-    #slot-container {
-      margin: 30px auto;
+    nav {
+      margin: 20px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 10px;
+      padding: 10px 20px;
+      background: #ffcc00;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      background: #ffaa00;
+    }
+
+    #game-area {
+      margin: 40px auto;
+      max-width: 600px;
+    }
+
+    .reels {
       display: grid;
       grid-template-columns: repeat(3, 100px);
       grid-template-rows: repeat(3, 100px);
       gap: 10px;
       justify-content: center;
+      margin-bottom: 20px;
     }
 
-    .reel {
+    .symbol {
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 10px;
+      font-size: 2em;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2em;
-      background-color: #222;
-      border: 2px solid #555;
-      border-radius: 10px;
-      transition: transform 0.2s ease;
     }
 
     .controls {
@@ -45,72 +70,114 @@
 
     button {
       padding: 10px 20px;
-      font-size: 1em;
+      margin: 5px;
       border: none;
       border-radius: 5px;
-      margin: 5px;
-      background-color: #ffcc00;
-      color: #000;
-      cursor: pointer;
+      background: #ffcc00;
+      color: black;
       font-weight: bold;
+      cursor: pointer;
     }
 
     button:hover {
-      background-color: #ffaa00;
+      background: #ffaa00;
     }
 
-    #balance {
+    #bet-display {
       font-size: 1.2em;
-      margin-top: 10px;
-      color: #00ffcc;
+      margin-bottom: 10px;
+    }
+
+    .wallet-buttons {
+      margin-top: 30px;
+    }
+
+    .wallet-buttons button {
+      background: #444;
+      color: white;
+    }
+
+    .wallet-buttons button:hover {
+      background: #666;
     }
   </style>
 </head>
 <body>
-  <h1>🎰 MemeCoin Slot Machine</h1>
+  <header>🎰 MemeCoin Slots</header>
 
-  <div id="balance">💰 Balans: <span id="points">1000</span> SOL</div>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="mint.html">🪙 Mint</a>
+    <a href="airdrop.html">🎁 Airdrops</a>
+    <a href="submit-token.html">📬 Submit</a>
+  </nav>
 
-  <div class="controls">
-    <button onclick="spin()">🎰 Spin met oefengeld</button>
-  </div>
+  <main id="game-area">
+    <div id="bet-display">Inzet: <span id="current-bet">1</span> $MEME</div>
 
-  <div id="slot-container">
-    <div class="reel">🍒</div>
-    <div class="reel">🍋</div>
-    <div class="reel">🍉</div>
-    <div class="reel">🍇</div>
-    <div class="reel">🍋</div>
-    <div class="reel">🍒</div>
-    <div class="reel">🍉</div>
-    <div class="reel">🍇</div>
-    <div class="reel">🍒</div>
-  </div>
+    <div class="controls">
+      <button onclick="changeBet(-1)">➖ Verlaag Inzet</button>
+      <button onclick="changeBet(1)">➕ Verhoog Inzet</button>
+    </div>
+
+    <div class="reels" id="reels">
+      <div class="symbol">🍒</div>
+      <div class="symbol">🍋</div>
+      <div class="symbol">🍉</div>
+      <div class="symbol">🍇</div>
+      <div class="symbol">⭐</div>
+      <div class="symbol">🔔</div>
+      <div class="symbol">🍀</div>
+      <div class="symbol">💎</div>
+      <div class="symbol">🔥</div>
+    </div>
+
+    <div class="controls">
+      <button onclick="spin()">🎰 Spin</button>
+    </div>
+
+    <div class="wallet-buttons">
+      <h3>Wallet Connect</h3>
+      <button onclick="connectPhantom()">🔗 Connect Phantom</button>
+      <button onclick="connectMetaMask()">🦊 Connect MetaMask</button>
+    </div>
+  </main>
 
   <script>
-    const symbols = ["🍒", "🍋", "🍉", "🍇"];
-    const reels = document.querySelectorAll(".reel");
-    const pointsDisplay = document.getElementById("points");
-    let points = 1000;
+    let currentBet = 1;
 
-    function spin() {
-      if (points < 10) return alert("Niet genoeg balans!");
-      points -= 10;
-
-      for (let i = 0; i < reels.length; i++) {
-        const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-        reels[i].textContent = randomSymbol;
-      }
-
-      checkWin();
-      pointsDisplay.textContent = points;
+    function changeBet(amount) {
+      currentBet += amount;
+      if (currentBet < 1) currentBet = 1;
+      document.getElementById('current-bet').textContent = currentBet;
     }
 
-    function checkWin() {
-      const midRow = [reels[3].textContent, reels[4].textContent, reels[5].textContent];
-      if (midRow.every((val) => val === midRow[0])) {
-        alert("🎉 Gewonnen! +100 SOL!");
-        points += 100;
+    function spin() {
+      alert(`Je draait met een inzet van ${currentBet} $MEME`);
+      // hier komt de spinscript straks
+    }
+
+    function connectPhantom() {
+      if (window.solana && window.solana.isPhantom) {
+        window.solana.connect().then(res => {
+          alert("✅ Verbonden met Phantom wallet: " + res.publicKey.toString());
+        }).catch(err => {
+          alert("❌ Verbinden mislukt: " + err.message);
+        });
+      } else {
+        alert("⚠️ Phantom Wallet is niet gevonden.");
+      }
+    }
+
+    function connectMetaMask() {
+      if (typeof window.ethereum !== 'undefined') {
+        window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+          alert("✅ Verbonden met MetaMask: " + accounts[0]);
+        }).catch(err => {
+          alert("❌ Verbinden mislukt: " + err.message);
+        });
+      } else {
+        alert("⚠️ MetaMask is niet geïnstalleerd.");
       }
     }
   </script>
