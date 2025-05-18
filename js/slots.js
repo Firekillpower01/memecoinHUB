@@ -9,6 +9,7 @@ let isSpinning = false;
 
 export function spinSlots() {
   if (isSpinning) return;
+
   if (state.memeBalance < config.spinCost) {
     showTemporaryAlert("❌ Niet genoeg $MEME tokens om te spinnen.");
     return;
@@ -25,18 +26,26 @@ export function spinSlots() {
   ];
 
   updateReelsDisplay(reels);
+  animateReels([
+    document.getElementById("reel-0"),
+    document.getElementById("reel-1"),
+    document.getElementById("reel-2")
+  ]);
 
   const isWin = reels.every(sym => sym === reels[0]);
-  if (isWin) {
-    const winnings = config.winReward;
-    state.memeBalance += winnings;
-    showTemporaryAlert(`🎉 Gewonnen! ${winnings} $MEME tokens!`);
-  } else {
-    showTemporaryAlert("😢 Geen winst, probeer opnieuw.");
-  }
 
-  updateBalanceDisplay();
-  isSpinning = false;
+  setTimeout(() => {
+    if (isWin) {
+      const winnings = config.winReward;
+      state.memeBalance += winnings;
+      showTemporaryAlert(`🎉 Gewonnen! ${winnings} $MEME tokens!`);
+    } else {
+      showTemporaryAlert("😢 Geen winst, probeer opnieuw.");
+    }
+
+    updateBalanceDisplay();
+    isSpinning = false;
+  }, 600); // wacht tot animatie voorbij is
 }
 
 function getRandomSymbol() {
@@ -50,12 +59,13 @@ function updateReelsDisplay(reels) {
     if (reel) reel.textContent = reels[i];
   }
 }
+
 // Animatie voor draaiende reels
 function animateReels(reelElements) {
   reelElements.forEach(reel => {
+    if (!reel) return;
     reel.classList.add("spin");
 
-    // Verwijder de animatieklasse na de duur van de animatie
     setTimeout(() => {
       reel.classList.remove("spin");
     }, 600); // duur moet matchen met de CSS animatie
