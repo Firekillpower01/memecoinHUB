@@ -2,205 +2,40 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎁 MemeCoin Airdrops</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #000428, #004e92);
-      font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
-    }
-
-    header {
-      padding: 20px;
-      background: #111;
-      font-size: 2em;
-      font-weight: bold;
-      color: #ffcc00;
-    }
-
-    nav {
-      margin: 20px;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      margin: 10px;
-      padding: 10px 20px;
-      background: #ffcc00;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      background: #ffaa00;
-    }
-
-    #airdrop-area {
-      margin: 40px auto;
-      max-width: 600px;
-    }
-
-    .airdrop-card {
-      background: #222;
-      border: 2px solid #555;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-
-    .airdrop-card h3 {
-      margin-top: 0;
-      color: #ffcc00;
-    }
-
-    .airdrop-card button {
-      background: #ffcc00;
-      color: black;
-      font-weight: bold;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .airdrop-card button:hover {
-      background: #ffaa00;
-    }
-
-    #airdrop-message, #wallet-info, #live-balance {
-      font-size: 1.2em;
-      margin-top: 20px;
-    }
-
-    #progress-container {
-      margin-top: 20px;
-      width: 80%;
-      height: 20px;
-      background: #444;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #progress-bar {
-      height: 100%;
-      background: #00ff88;
-      width: 100%;
-      transition: width 0.5s ease;
-    }
-
-    #nft-preview {
-      width: 150px;
-      height: auto;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎁 Airdrop $MEME</title>
+  <link rel="stylesheet" href="css/slots.css" />
 </head>
 <body>
-  <header>🎁 MemeCoin Airdrops</header>
+  <header>🎁 Claim je gratis $MEME</header>
 
   <nav>
     <a href="index.html">🏠 Home</a>
     <a href="mint.html">🪙 Mint</a>
     <a href="airdrop.html">🎁 Airdrops</a>
-    <a href="submit-token.html">📬 Submit</a>
+    <a href="slots.html">🎰 Slots</a>
   </nav>
 
-  <main id="airdrop-area">
-    <div class="airdrop-card">
-      <h3>Claim je gratis $MEME tokens</h3>
-      <button onclick="claimAirdrop()">📥 Claim Airdrop</button>
-      <div id="airdrop-message"></div>
-      <div id="progress-container">
-        <div id="progress-bar"></div>
-      </div>
-    </div>
-
-    <div class="airdrop-card">
-      <h3>Connect je wallet</h3>
+  <main>
+    <div class="airdrop-container">
+      <p>📢 Ontvang gratis $MEME tokens en start met spelen!</p>
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
+      <button onclick="claimAirdrop()">🎁 Claim Airdrop</button>
+      <div id="airdrop-message"></div>
       <div id="wallet-info"></div>
       <div id="live-balance"></div>
     </div>
-
-    <div class="airdrop-card">
-      <h3>Claim je gratis NFT</h3>
-      <button onclick="claimNFT()">🎨 Claim NFT</button>
-      <img id="nft-preview" src="https://via.placeholder.com/150" alt="NFT Preview" style="display:none" />
-      <div id="nft-message"></div>
-    </div>
   </main>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script>
-  let airdropClaimed = false;
-  let airdropAmount = 50;
-  let totalAvailable = 1000;
+  <!-- JavaScript modules -->
+  <script type="module">
+    import { connectPhantom } from './js/wallet.js';
+    import { claimAirdrop } from './js/airdrop.js';
 
-  function updateProgress() {
-    const remaining = Math.max(totalAvailable - (airdropClaimed ? airdropAmount : 0), 0);
-    const percent = (remaining / totalAvailable) * 100;
-    document.getElementById("progress-bar").style.width = percent + "%";
-  }
-
-  function claimAirdrop() {
-    if (airdropClaimed) {
-      document.getElementById("airdrop-message").textContent = "❌ Je hebt al geclaimd.";
-      return;
-    }
-
-    if (window.solana && window.solana.isPhantom) {
-      window.solana.connect().then(res => {
-        const pubKey = res.publicKey.toString();
-        airdropClaimed = true;
-        confetti();
-        document.getElementById("airdrop-message").textContent = `✅ ${airdropAmount} $MEME tokens verzonden naar ${pubKey}`;
-        document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${airdropAmount}`;
-        updateProgress();
-      }).catch(err => {
-        document.getElementById("airdrop-message").textContent = "❌ Verbinden mislukt: " + err.message;
-      });
-    } else {
-      document.getElementById("airdrop-message").textContent = "⚠️ Phantom Wallet niet gevonden.";
-    }
-  }
-
-  function connectPhantom() {
-    if (window.solana && window.solana.isPhantom) {
-      window.solana.connect().then(res => {
-        const pubKey = res.publicKey.toString();
-        document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
-        document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${airdropClaimed ? airdropAmount : 0}`;
-      }).catch(err => {
-        alert("❌ Verbinden mislukt: " + err.message);
-      });
-    } else {
-      alert("⚠️ Phantom Wallet is niet gevonden.");
-    }
-  }
-
-  function claimNFT() {
-    if (window.solana && window.solana.isPhantom) {
-      window.solana.connect().then(res => {
-        const pubKey = res.publicKey.toString();
-        document.getElementById("nft-preview").style.display = "block";
-        document.getElementById("nft-message").textContent = `🎉 NFT succesvol verstuurd naar ${pubKey}`;
-      }).catch(err => {
-        document.getElementById("nft-message").textContent = "❌ NFT claim mislukt: " + err.message;
-      });
-    } else {
-      document.getElementById("nft-message").textContent = "⚠️ Phantom Wallet is niet gevonden.";
-    }
-  }
-
-  window.onload = updateProgress;
-</script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.connectPhantom = connectPhantom;
+      window.claimAirdrop = claimAirdrop;
+    });
+  </script>
 </body>
 </html>
