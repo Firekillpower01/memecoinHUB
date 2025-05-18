@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🪙 Mint $MEME Tokens</title>
+  <title>🪙 Mint $MEME</title>
   <link rel="stylesheet" href="css/mint.css" />
 </head>
 <body>
@@ -17,22 +17,23 @@
   </nav>
 
   <main>
-    <div class="card">
-      <h3>Mint gratis $MEME tokens</h3>
-      <button onclick="mintTokens()">🪙 Mint Tokens</button>
-      <div id="mint-message"></div>
-    </div>
+    <button onclick="connectPhantom()">🔗 Connect Phantom</button>
+    <div id="wallet-info"></div>
+    <div id="live-balance"></div>
 
-    <div class="card">
-      <h3>Connect je wallet</h3>
-      <button onclick="connectPhantom()">🔗 Connect Phantom</button>
-      <div id="wallet-info"></div>
-      <div id="live-balance"></div>
-    </div>
+    <hr style="margin: 30px 0; border-color: #00ffd5;">
+
+    <button onclick="mintTokens()">🪙 Mint 100 $MEME</button>
+    <div id="mint-message"></div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/mint.js"></script>
+  <script type="module">
+    import { connectPhantom } from './js/main.js';
+    import { mintTokens } from './js/mint.js';
+
+    // Toegankelijk maken in global scope
+    window.connectPhantom = connectPhantom;
+    window.mintTokens = mintTokens;
+  </script>
 </body>
 </html>
