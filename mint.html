@@ -2,8 +2,8 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🪙 MemeCoin Mint</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🪙 Mint $MEME Tokens</title>
   <style>
     body {
       margin: 0;
@@ -13,64 +13,53 @@
       color: white;
       text-align: center;
     }
-
     header {
       padding: 20px;
       background: #111;
       font-size: 2em;
       font-weight: bold;
-      color: #00ff88;
+      color: #00ffd5;
     }
-
     nav {
       margin: 20px;
     }
-
     nav a {
       color: #fff;
       text-decoration: none;
       margin: 10px;
       padding: 10px 20px;
-      background: #00ff88;
+      background: #00ffd5;
       border-radius: 5px;
       font-weight: bold;
     }
-
     nav a:hover {
-      background: #00cc6a;
+      background: #00bfae;
     }
-
-    .mint-card {
+    .card {
       background: #222;
-      border: 2px solid #555;
+      border: 2px solid #444;
       border-radius: 10px;
       padding: 20px;
       margin: 40px auto;
-      max-width: 600px;
+      max-width: 500px;
     }
-
-    .mint-card button {
-      background: #00ff88;
+    button {
+      background: #00ffd5;
       color: black;
       font-weight: bold;
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 10px;
     }
-
-    .mint-card button:hover {
-      background: #00cc6a;
-    }
-
-    #mint-message, #wallet-info, #live-balance {
-      font-size: 1.2em;
-      margin-top: 20px;
+    button:hover {
+      background: #00bfae;
     }
   </style>
 </head>
 <body>
-  <header>🪙 MemeCoin Mint</header>
+  <header>🪙 Mint $MEME Tokens</header>
 
   <nav>
     <a href="index.html">🏠 Home</a>
@@ -79,12 +68,15 @@
     <a href="slots.html">🎰 Slots</a>
   </nav>
 
-  <main class="mint-card">
-    <h3>Mint je eigen $MEME tokens</h3>
-    <button onclick="mintTokens()">🪙 Mint Tokens</button>
-    <div id="mint-message"></div>
+  <main>
+    <div class="card">
+      <h3>Mint gratis $MEME tokens</h3>
+      <button onclick="mintTokens()">🪙 Mint Tokens</button>
+      <div id="mint-message"></div>
+    </div>
 
-    <div style="margin-top: 30px">
+    <div class="card">
+      <h3>Connect je wallet</h3>
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
       <div id="wallet-info"></div>
       <div id="live-balance"></div>
@@ -93,22 +85,15 @@
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
-    let userMinted = false;
-    let mintAmount = 100;
+    let memeBalance = 0;
 
     function mintTokens() {
-      if (userMinted) {
-        document.getElementById("mint-message").textContent = "❌ Je hebt al gemint.";
-        return;
-      }
-
       if (window.solana && window.solana.isPhantom) {
         window.solana.connect().then(res => {
-          const pubKey = res.publicKey.toString();
-          userMinted = true;
+          memeBalance += 100;
           confetti();
-          document.getElementById("mint-message").textContent = `✅ ${mintAmount} $MEME tokens succesvol gemint voor ${pubKey}`;
-          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${mintAmount}`;
+          document.getElementById("mint-message").textContent = `✅ 100 $MEME tokens toegevoegd aan je wallet!`;
+          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
         }).catch(err => {
           document.getElementById("mint-message").textContent = "❌ Verbinden mislukt: " + err.message;
         });
@@ -122,14 +107,17 @@
         window.solana.connect().then(res => {
           const pubKey = res.publicKey.toString();
           document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
-          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${userMinted ? mintAmount : 0}`;
+          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
         }).catch(err => {
           alert("❌ Verbinden mislukt: " + err.message);
         });
       } else {
-        alert("⚠️ Phantom Wallet is niet gevonden.");
+        alert("⚠️ Phantom Wallet niet gevonden.");
       }
     }
   </script>
 </body>
 </html>
+
+
+<!-- slots.html komt hierna in een apart document -->
