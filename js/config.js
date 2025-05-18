@@ -1,6 +1,9 @@
 // js/config.js
 
-export const MEME_TOKEN_NAME = "$MEME";
-export const DEFAULT_MINT_AMOUNT = 100;
+// Instellingen en vaste waarden voor de app
+export const CONFIG = {
+  TOKEN_NAME: "$MEME",
+  TOKEN_INCREMENT: 100,
+  START_BALANCE: 0,
+};
 
-export const NETWORK = "devnet"; // of "mainnet-beta"
