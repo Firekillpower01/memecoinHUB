@@ -124,3 +124,37 @@ button:hover {
 .wallet-info {
   margin-top: 50px;
 }
+/* Airdrop sectie */
+.airdrop-section {
+  margin-top: 40px;
+  padding: 20px;
+  background: #1b1b1b;
+  border: 2px dashed #00ffd5;
+  border-radius: 10px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 15px rgba(0, 255, 213, 0.15);
+}
+
+#airdrop-button {
+  background-color: #00ffd5;
+  color: #000;
+  font-weight: bold;
+  padding: 12px 24px;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#airdrop-button:hover {
+  background-color: #00bfae;
+}
+
+#airdrop-message {
+  margin-top: 15px;
+  font-size: 1.1em;
+  color: #eee;
+}
