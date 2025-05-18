@@ -1,0 +1,60 @@
+/* css/mint.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+}
+
+header {
+  padding: 20px;
+  background: #111;
+  font-size: 2em;
+  font-weight: bold;
+  color: #00ffd5;
+}
+
+nav {
+  margin: 20px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 10px;
+  padding: 10px 20px;
+  background: #00ffd5;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  background: #00bfae;
+}
+
+.card {
+  background: #222;
+  border: 2px solid #444;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 40px auto;
+  max-width: 500px;
+}
+
+button {
+  background: #00ffd5;
+  color: black;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #00bfae;
+}
