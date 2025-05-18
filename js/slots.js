@@ -1,43 +1,50 @@
+// js/slots.js
+
+const symbols = ["🍒", "🍋", "🔔", "⭐", "💎", "🃏"];
 let memeBalance = 0;
 
-function connectPhantom() {
-  if (window.solana && window.solana.isPhantom) {
-    window.solana.connect().then(res => {
-      const pubKey = res.publicKey.toString();
-      document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
-      document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
-    }).catch(err => {
-      alert("❌ Verbinden mislukt: " + err.message);
-    });
-  } else {
-    alert("⚠️ Phantom Wallet niet gevonden.");
-  }
-}
-
 function spinSlot() {
-  const symbols = ["🍉", "🍋", "🍒", "⭐", "💎", "7️⃣"];
-  const slotCells = document.querySelectorAll(".slot-cell");
-  let result = [];
+  const slotGrid = document.getElementById("slot-grid");
+  const result = document.getElementById("slot-result");
+  const lastWin = document.getElementById("last-win");
+  result.textContent = "";
+  lastWin.textContent = "";
 
-  for (let i = 0; i < slotCells.length; i++) {
+  const spinResult = [];
+  const cells = slotGrid.querySelectorAll(".slot-cell");
+
+  cells.forEach((cell, index) => {
     const randSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-    slotCells[i].textContent = randSymbol;
-    result.push(randSymbol);
+    cell.textContent = randSymbol;
+    spinResult.push(randSymbol);
+  });
+
+  // Check win condition (3+ in a row from the start)
+  const first = spinResult[0];
+  let matchCount = 1;
+  for (let i = 1; i < spinResult.length; i++) {
+    if (spinResult[i] === first) {
+      matchCount++;
+    } else {
+      break;
+    }
   }
 
-  let winnings = 0;
-  if (result.every(sym => sym === result[0])) {
-    winnings = 500;
+  if (matchCount >= 3) {
+    const winAmount = matchCount * 20;
+    memeBalance += winAmount;
+    result.textContent = `🎉 Gewonnen: ${winAmount} $MEME!`;
+    lastWin.textContent = `✨ Symbolen op rij: ${matchCount} x ${first}`;
     confetti();
-    document.getElementById("slot-result").textContent = "🎉 JACKPOT! Alle symbolen zijn gelijk!";
-  } else if (result[0] === result[1] || result[1] === result[2] || result[2] === result[3] || result[3] === result[4]) {
-    winnings = 100;
-    document.getElementById("slot-result").textContent = "✅ Je hebt een winnende combinatie!";
+    updateBalance();
   } else {
-    document.getElementById("slot-result").textContent = "❌ Geen winst. Probeer opnieuw!";
+    result.textContent = "❌ Geen winst, probeer opnieuw!";
   }
+} 
 
-  memeBalance += winnings;
-  document.getElementById("last-win").textContent = `💸 Winst deze ronde: ${winnings} $MEME`;
-  document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
+function updateBalance() {
+  const balanceEl = document.getElementById("live-balance");
+  if (balanceEl) {
+    balanceEl.textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
+  }
 }
