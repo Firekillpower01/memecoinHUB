@@ -72,10 +72,27 @@
       background: #ffaa00;
     }
 
-    #airdrop-message {
+    #airdrop-message, #wallet-info {
       font-size: 1.2em;
-      color: #00ff88;
       margin-top: 20px;
+    }
+
+    #progress-container {
+      margin-top: 20px;
+      width: 80%;
+      height: 20px;
+      background: #444;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #progress-bar {
+      height: 100%;
+      background: #00ff88;
+      width: 100%; /* Dynamisch aanpassen */
+      transition: width 0.5s ease;
     }
   </style>
 </head>
@@ -94,17 +111,35 @@
       <h3>Claim je gratis $MEME tokens</h3>
       <button onclick="claimAirdrop()">📥 Claim Airdrop</button>
       <div id="airdrop-message"></div>
+      <div id="progress-container">
+        <div id="progress-bar"></div>
+      </div>
     </div>
 
     <div class="airdrop-card">
       <h3>Connect je wallet</h3>
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
+      <div id="wallet-info"></div>
+    </div>
+
+    <div class="airdrop-card">
+      <h3>Claim je gratis NFT</h3>
+      <button onclick="claimNFT()">🎨 Claim NFT</button>
+      <div id="nft-message"></div>
     </div>
   </main>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
   let airdropClaimed = false;
   let airdropAmount = 50;
+  let totalAvailable = 1000;
+
+  function updateProgress() {
+    const remaining = Math.max(totalAvailable - (airdropClaimed ? airdropAmount : 0), 0);
+    const percent = (remaining / totalAvailable) * 100;
+    document.getElementById("progress-bar").style.width = percent + "%";
+  }
 
   function claimAirdrop() {
     if (airdropClaimed) {
@@ -115,9 +150,10 @@
     if (window.solana && window.solana.isPhantom) {
       window.solana.connect().then(res => {
         const pubKey = res.publicKey.toString();
-        // Hier zou je backend-aanroep doen om daadwerkelijk $MEME te versturen
         airdropClaimed = true;
+        confetti();
         document.getElementById("airdrop-message").textContent = `✅ ${airdropAmount} $MEME tokens verzonden naar ${pubKey}`;
+        updateProgress();
       }).catch(err => {
         document.getElementById("airdrop-message").textContent = "❌ Verbinden mislukt: " + err.message;
       });
@@ -129,7 +165,8 @@
   function connectPhantom() {
     if (window.solana && window.solana.isPhantom) {
       window.solana.connect().then(res => {
-        alert("✅ Verbonden met Phantom wallet: " + res.publicKey.toString());
+        const pubKey = res.publicKey.toString();
+        document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}\nBalans: ${airdropAmount} $MEME`;
       }).catch(err => {
         alert("❌ Verbinden mislukt: " + err.message);
       });
@@ -137,6 +174,22 @@
       alert("⚠️ Phantom Wallet is niet gevonden.");
     }
   }
+
+  function claimNFT() {
+    if (window.solana && window.solana.isPhantom) {
+      window.solana.connect().then(res => {
+        const pubKey = res.publicKey.toString();
+        // Placeholder NFT logica (echt zou via backend lopen)
+        document.getElementById("nft-message").textContent = `🎉 NFT succesvol verstuurd naar ${pubKey}`;
+      }).catch(err => {
+        document.getElementById("nft-message").textContent = "❌ NFT claim mislukt: " + err.message;
+      });
+    } else {
+      document.getElementById("nft-message").textContent = "⚠️ Phantom Wallet is niet gevonden.";
+    }
+  }
+
+  window.onload = updateProgress;
 </script>
 </body>
 </html>
