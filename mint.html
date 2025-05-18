@@ -84,22 +84,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script>
-
-    function connectPhantom() {
-      if (window.solana && window.solana.isPhantom) {
-        window.solana.connect().then(res => {
-          const pubKey = res.publicKey.toString();
-          document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
-          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
-        }).catch(err => {
-          alert("❌ Verbinden mislukt: " + err.message);
-        });
-      } else {
-        alert("⚠️ Phantom Wallet niet gevonden.");
-      }
-    }
-  </script>
+  
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="js/main.js"></script>
 <script src="js/mint.js"></script>
