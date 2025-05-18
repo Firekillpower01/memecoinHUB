@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎁 Airdrop $MEME</title>
-  <link rel="stylesheet" href="css/slots.css" />
+  <title>🎁 Claim Airdrop</title>
+  <link rel="stylesheet" href="css/airdrop.css" />
 </head>
 <body>
-  <header>🎁 Claim je $MEME Airdrop</header>
+  <header>🎁 Claim je gratis $MEME airdrop</header>
 
   <nav>
     <a href="index.html">🏠 Home</a>
@@ -17,24 +17,23 @@
   </nav>
 
   <main>
-    <section class="wallet-info">
-      <button onclick="connectPhantom()">🔗 Connect Phantom</button>
-      <div id="wallet-info"></div>
-      <div id="live-balance"></div>
-    </section>
+    <button onclick="connectPhantom()">🔗 Connect Phantom</button>
+    <div id="wallet-info"></div>
+    <div id="live-balance"></div>
 
-    <section class="airdrop-section">
-      <button id="airdrop-button">🎁 Claim Airdrop</button>
-      <div id="airdrop-message"></div>
-    </section>
+    <hr style="margin: 30px 0; border-color: #00ffd5;">
+
+    <button onclick="claimAirdrop()">🎁 Claim 50 $MEME</button>
+    <div id="airdrop-message"></div>
   </main>
 
   <script type="module">
-    import { connectPhantom } from './js/wallet.js';
+    import { connectPhantom } from './js/main.js';
     import { claimAirdrop } from './js/airdrop.js';
 
+    // Toegankelijk maken in global scope
     window.connectPhantom = connectPhantom;
-    document.getElementById('airdrop-button').addEventListener('click', claimAirdrop);
+    window.claimAirdrop = claimAirdrop;
   </script>
 </body>
 </html>
