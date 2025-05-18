@@ -1,76 +1,72 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎰 MemeCoin Slots</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎰 PUMP RAIDERS - Slots</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to bottom, #1f4037, #99f2c8);
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
       font-family: Arial, sans-serif;
       color: white;
       text-align: center;
     }
-
     header {
       padding: 20px;
       background: #111;
       font-size: 2em;
       font-weight: bold;
-      color: #ff66cc;
+      color: #00ffd5;
     }
-
     nav {
       margin: 20px;
     }
-
     nav a {
       color: #fff;
       text-decoration: none;
       margin: 10px;
       padding: 10px 20px;
-      background: #ff66cc;
+      background: #00ffd5;
       border-radius: 5px;
       font-weight: bold;
     }
-
     nav a:hover {
-      background: #cc3399;
+      background: #00bfae;
     }
-
-    .slot-card {
+    .card {
       background: #222;
-      border: 2px solid #555;
+      border: 2px solid #444;
       border-radius: 10px;
       padding: 20px;
-      margin: 40px auto;
-      max-width: 600px;
+      margin: 20px auto;
+      max-width: 500px;
     }
-
-    .slot-card button {
-      background: #ff66cc;
+    button {
+      background: #00ffd5;
       color: black;
       font-weight: bold;
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 10px;
     }
-
-    .slot-card button:hover {
-      background: #cc3399;
+    button:hover {
+      background: #00bfae;
     }
-
-    #spin-result, #wallet-info, #live-balance, #win-info {
+    #slot-result {
       font-size: 1.2em;
-      margin-top: 20px;
+      margin-top: 10px;
+    }
+    #live-balance, #wallet-info, #last-win {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <header>🎰 MemeCoin Slots</header>
+  <header>🎰 PUMP RAIDERS - Slots</header>
 
   <nav>
     <a href="index.html">🏠 Home</a>
@@ -79,13 +75,16 @@
     <a href="slots.html">🎰 Slots</a>
   </nav>
 
-  <main class="slot-card">
-    <h3>Speel & win $MEME tokens</h3>
-    <button onclick="spinSlots()">🎰 Spin!</button>
-    <div id="spin-result"></div>
-    <div id="win-info"></div>
+  <main>
+    <div class="card">
+      <h3>Spin & Win $MEME tokens</h3>
+      <button onclick="spinSlot()">🎰 Spin</button>
+      <div id="slot-result"></div>
+      <div id="last-win"></div>
+    </div>
 
-    <div style="margin-top: 30px">
+    <div class="card">
+      <h3>Connect je wallet</h3>
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
       <div id="wallet-info"></div>
       <div id="live-balance"></div>
@@ -94,29 +93,22 @@
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
-    let userWins = 0;
-    let totalWinnings = 0;
+    let memeBalance = 0;
+    let lastWin = 0;
 
-    function spinSlots() {
-      const result = Math.random();
-      let winAmount = 0;
-
-      if (result < 0.3) {
-        winAmount = 20;
-        confetti();
-        document.getElementById("spin-result").textContent = "🎉 Je hebt 3 op een rij!";
-      } else if (result < 0.6) {
-        winAmount = 10;
-        document.getElementById("spin-result").textContent = "👏 Twee dezelfde symbolen!";
+    function spinSlot() {
+      if (window.solana && window.solana.isPhantom) {
+        window.solana.connect().then(res => {
+          const won = Math.floor(Math.random() * 150);
+          memeBalance += won;
+          lastWin = won;
+          confetti();
+          document.getElementById("slot-result").textContent = `🎉 Je hebt ${won} $MEME tokens gewonnen!`;
+          document.getElementById("last-win").textContent = `🏆 Laatste winst: ${won} $MEME`;
+          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
+        });
       } else {
-        document.getElementById("spin-result").textContent = "😢 Geen winnende combinatie.";
-      }
-
-      if (winAmount > 0) {
-        userWins += 1;
-        totalWinnings += winAmount;
-        document.getElementById("win-info").textContent = `💸 Winst deze spin: ${winAmount} $MEME | Totale winst: ${totalWinnings}`;
-        document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${totalWinnings}`;
+        document.getElementById("slot-result").textContent = "⚠️ Phantom Wallet niet gevonden.";
       }
     }
 
@@ -125,12 +117,12 @@
         window.solana.connect().then(res => {
           const pubKey = res.publicKey.toString();
           document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
-          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${totalWinnings}`;
+          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
         }).catch(err => {
           alert("❌ Verbinden mislukt: " + err.message);
         });
       } else {
-        alert("⚠️ Phantom Wallet is niet gevonden.");
+        alert("⚠️ Phantom Wallet niet gevonden.");
       }
     }
   </script>
