@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎰 Slot Machine</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎰 MemeCoin Slots</title>
   <style>
-    @keyframes blink {
-      0% { background-color: #222; }
-      100% { background-color: #00ff88; }
-    }
-
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to bottom, #000428, #004e92);
+      background: linear-gradient(to bottom, #1f4037, #99f2c8);
       font-family: Arial, sans-serif;
       color: white;
       text-align: center;
@@ -24,7 +19,7 @@
       background: #111;
       font-size: 2em;
       font-weight: bold;
-      color: #ffcc00;
+      color: #ff66cc;
     }
 
     nav {
@@ -36,85 +31,41 @@
       text-decoration: none;
       margin: 10px;
       padding: 10px 20px;
-      background: #ffcc00;
+      background: #ff66cc;
       border-radius: 5px;
       font-weight: bold;
     }
 
     nav a:hover {
-      background: #ffaa00;
+      background: #cc3399;
     }
 
-    #game-area {
+    .slot-card {
+      background: #222;
+      border: 2px solid #555;
+      border-radius: 10px;
+      padding: 20px;
       margin: 40px auto;
       max-width: 600px;
     }
 
-    .reels {
-      display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-template-rows: repeat(3, 100px);
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .symbol {
-      background: #222;
-      border: 2px solid #555;
-      border-radius: 10px;
-      font-size: 2em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .controls {
-      margin: 20px;
-    }
-
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-      border: none;
-      border-radius: 5px;
-      background: #ffcc00;
+    .slot-card button {
+      background: #ff66cc;
       color: black;
       font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #ffaa00;
+    .slot-card button:hover {
+      background: #cc3399;
     }
 
-    #bet-display {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-    }
-
-    .wallet-buttons {
-      margin-top: 30px;
-    }
-
-    .wallet-buttons button {
-      background: #444;
-      color: white;
-    }
-
-    .wallet-buttons button:hover {
-      background: #666;
-    }
-
-    #balance-display {
+    #spin-result, #wallet-info, #live-balance, #win-info {
       font-size: 1.2em;
       margin-top: 20px;
-    }
-
-    #win-display {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #00ff88;
     }
   </style>
 </head>
@@ -125,150 +76,63 @@
     <a href="index.html">🏠 Home</a>
     <a href="mint.html">🪙 Mint</a>
     <a href="airdrop.html">🎁 Airdrops</a>
-    <a href="submit-token.html">📬 Submit</a>
+    <a href="slots.html">🎰 Slots</a>
   </nav>
 
-  <main id="game-area">
-    <div id="bet-display">Inzet: <span id="current-bet">1</span> $MEME</div>
-    <div id="balance-display">Balans: <span id="current-balance">100</span> $MEME</div>
-    <div id="win-display">Winst: 0</div>
+  <main class="slot-card">
+    <h3>Speel & win $MEME tokens</h3>
+    <button onclick="spinSlots()">🎰 Spin!</button>
+    <div id="spin-result"></div>
+    <div id="win-info"></div>
 
-    <div class="controls">
-      <button onclick="changeBet(-1)">➖ Verlaag Inzet</button>
-      <button onclick="changeBet(1)">➕ Verhoog Inzet</button>
-    </div>
-
-    <div class="reels" id="reels">
-      <div class="symbol">🍒</div>
-      <div class="symbol">🍋</div>
-      <div class="symbol">🍉</div>
-      <div class="symbol">🍇</div>
-      <div class="symbol">⭐</div>
-      <div class="symbol">🔔</div>
-      <div class="symbol">🍀</div>
-      <div class="symbol">💎</div>
-      <div class="symbol">🔥</div>
-    </div>
-
-    <div class="controls">
-      <button onclick="spin()">🎰 Spin</button>
-    </div>
-
-    <div class="wallet-buttons">
-      <h3>Wallet Connect</h3>
+    <div style="margin-top: 30px">
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
-      <button onclick="connectMetaMask()">🦊 Connect MetaMask</button>
+      <div id="wallet-info"></div>
+      <div id="live-balance"></div>
     </div>
   </main>
-<script>
-  const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐", "🔔", "🍀", "💎", "🔥", "🃏", "🎁"];
-  let currentBet = 1;
-  let balance = 100;
 
-  function updateUI() {
-    document.getElementById('current-bet').textContent = currentBet;
-    document.getElementById('current-balance').textContent = balance;
-  }
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    let userWins = 0;
+    let totalWinnings = 0;
 
-  function changeBet(amount) {
-    currentBet += amount;
-    if (currentBet < 1) currentBet = 1;
-    updateUI();
-  }
+    function spinSlots() {
+      const result = Math.random();
+      let winAmount = 0;
 
-  function getRandomSymbol() {
-    return symbols[Math.floor(Math.random() * symbols.length)];
-  }
-
-  function spin() {
-    const reels = document.querySelectorAll(".symbol");
-    reels.forEach(el => {
-      el.classList.remove("win");
-      el.style.animation = "";
-    });
-
-    let result = [];
-    for (let i = 0; i < reels.length; i++) {
-      (function(i) {
-        setTimeout(() => {
-          const sym = getRandomSymbol();
-          reels[i].textContent = sym;
-          result[i] = sym;
-          if (i === reels.length - 1) checkWin(result);
-        }, i * 150);
-      })(i);
-    }
-  }
-
-  function checkWin(symbols) {
-    const rows = [
-      [symbols[0], symbols[1], symbols[2]],
-      [symbols[3], symbols[4], symbols[5]],
-      [symbols[6], symbols[7], symbols[8]],
-    ];
-
-    let totalWin = 0;
-    let bonusRound = false;
-
-    rows.forEach((row, index) => {
-      if (row.every(sym => sym === row[0])) {
-        highlightRow(index);
-        totalWin += currentBet * 10;
-      } else if (row.includes("🃏") && row.filter(sym => sym !== "🃏").length === 1) {
-        highlightRow(index);
-        totalWin += currentBet * 5;
+      if (result < 0.3) {
+        winAmount = 20;
+        confetti();
+        document.getElementById("spin-result").textContent = "🎉 Je hebt 3 op een rij!";
+      } else if (result < 0.6) {
+        winAmount = 10;
+        document.getElementById("spin-result").textContent = "👏 Twee dezelfde symbolen!";
+      } else {
+        document.getElementById("spin-result").textContent = "😢 Geen winnende combinatie.";
       }
-    });
 
-    const bonusCount = symbols.filter(s => s === "🎁").length;
-    if (bonusCount >= 2) {
-      bonusRound = true;
-      totalWin += bonusCount * currentBet * 2;
-      alert(`🎁 BONUSRONDE! Je hebt ${bonusCount} bonussymbolen.`);
+      if (winAmount > 0) {
+        userWins += 1;
+        totalWinnings += winAmount;
+        document.getElementById("win-info").textContent = `💸 Winst deze spin: ${winAmount} $MEME | Totale winst: ${totalWinnings}`;
+        document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${totalWinnings}`;
+      }
     }
 
-    if (totalWin > 0) {
-      balance += totalWin;
-      document.getElementById('win-display').textContent = `Winst: ${totalWin} $MEME`;
-    } else {
-      balance -= currentBet;
-      document.getElementById('win-display').textContent = `Winst: 0`;
+    function connectPhantom() {
+      if (window.solana && window.solana.isPhantom) {
+        window.solana.connect().then(res => {
+          const pubKey = res.publicKey.toString();
+          document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
+          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${totalWinnings}`;
+        }).catch(err => {
+          alert("❌ Verbinden mislukt: " + err.message);
+        });
+      } else {
+        alert("⚠️ Phantom Wallet is niet gevonden.");
+      }
     }
-
-    updateUI();
-  }
-
-  function highlightRow(rowIndex) {
-    for (let i = 0; i < 3; i++) {
-      const reelIndex = rowIndex * 3 + i;
-      const reel = document.querySelectorAll(".symbol")[reelIndex];
-      reel.style.animation = "blink 1s ease-in-out infinite alternate";
-    }
-  }
-
-  function connectPhantom() {
-    if (window.solana && window.solana.isPhantom) {
-      window.solana.connect().then(res => {
-        alert("✅ Verbonden met Phantom wallet: " + res.publicKey.toString());
-      }).catch(err => {
-        alert("❌ Verbinden mislukt: " + err.message);
-      });
-    } else {
-      alert("⚠️ Phantom Wallet is niet gevonden.");
-    }
-  }
-
-  function connectMetaMask() {
-    if (typeof window.ethereum !== 'undefined') {
-      window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
-        alert("✅ Verbonden met MetaMask: " + accounts[0]);
-      }).catch(err => {
-        alert("❌ Verbinden mislukt: " + err.message);
-      });
-    } else {
-      alert("⚠️ MetaMask is niet geïnstalleerd.");
-    }
-  }
-</script>
+  </script>
 </body>
 </html>
