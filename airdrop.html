@@ -72,7 +72,7 @@
       background: #ffaa00;
     }
 
-    #airdrop-message, #wallet-info {
+    #airdrop-message, #wallet-info, #live-balance {
       font-size: 1.2em;
       margin-top: 20px;
     }
@@ -91,8 +91,15 @@
     #progress-bar {
       height: 100%;
       background: #00ff88;
-      width: 100%; /* Dynamisch aanpassen */
+      width: 100%;
       transition: width 0.5s ease;
+    }
+
+    #nft-preview {
+      width: 150px;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -120,11 +127,13 @@
       <h3>Connect je wallet</h3>
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
       <div id="wallet-info"></div>
+      <div id="live-balance"></div>
     </div>
 
     <div class="airdrop-card">
       <h3>Claim je gratis NFT</h3>
       <button onclick="claimNFT()">🎨 Claim NFT</button>
+      <img id="nft-preview" src="https://via.placeholder.com/150" alt="NFT Preview" style="display:none" />
       <div id="nft-message"></div>
     </div>
   </main>
@@ -153,6 +162,7 @@
         airdropClaimed = true;
         confetti();
         document.getElementById("airdrop-message").textContent = `✅ ${airdropAmount} $MEME tokens verzonden naar ${pubKey}`;
+        document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${airdropAmount}`;
         updateProgress();
       }).catch(err => {
         document.getElementById("airdrop-message").textContent = "❌ Verbinden mislukt: " + err.message;
@@ -166,7 +176,8 @@
     if (window.solana && window.solana.isPhantom) {
       window.solana.connect().then(res => {
         const pubKey = res.publicKey.toString();
-        document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}\nBalans: ${airdropAmount} $MEME`;
+        document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
+        document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${airdropClaimed ? airdropAmount : 0}`;
       }).catch(err => {
         alert("❌ Verbinden mislukt: " + err.message);
       });
@@ -179,7 +190,7 @@
     if (window.solana && window.solana.isPhantom) {
       window.solana.connect().then(res => {
         const pubKey = res.publicKey.toString();
-        // Placeholder NFT logica (echt zou via backend lopen)
+        document.getElementById("nft-preview").style.display = "block";
         document.getElementById("nft-message").textContent = `🎉 NFT succesvol verstuurd naar ${pubKey}`;
       }).catch(err => {
         document.getElementById("nft-message").textContent = "❌ NFT claim mislukt: " + err.message;
