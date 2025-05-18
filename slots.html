@@ -6,9 +6,9 @@
   <title>🎰 Slot Machine</title>
   <style>
     @keyframes blink {
-  0% { background-color: #222; }
-  100% { background-color: #00ff88; }
-}
+      0% { background-color: #222; }
+      100% { background-color: #00ff88; }
+    }
 
     body {
       margin: 0;
@@ -105,6 +105,17 @@
     .wallet-buttons button:hover {
       background: #666;
     }
+
+    #balance-display {
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+
+    #win-display {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #00ff88;
+    }
   </style>
 </head>
 <body>
@@ -119,6 +130,8 @@
 
   <main id="game-area">
     <div id="bet-display">Inzet: <span id="current-bet">1</span> $MEME</div>
+    <div id="balance-display">Balans: <span id="current-balance">100</span> $MEME</div>
+    <div id="win-display">Winst: 0</div>
 
     <div class="controls">
       <button onclick="changeBet(-1)">➖ Verlaag Inzet</button>
@@ -148,13 +161,19 @@
     </div>
   </main>
 <script>
-  const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐", "🔔", "🍀", "💎", "🔥"];
+  const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐", "🔔", "🍀", "💎", "🔥", "🃏", "🎁"];
   let currentBet = 1;
+  let balance = 100;
+
+  function updateUI() {
+    document.getElementById('current-bet').textContent = currentBet;
+    document.getElementById('current-balance').textContent = balance;
+  }
 
   function changeBet(amount) {
     currentBet += amount;
     if (currentBet < 1) currentBet = 1;
-    document.getElementById('current-bet').textContent = currentBet;
+    updateUI();
   }
 
   function getRandomSymbol() {
@@ -163,14 +182,11 @@
 
   function spin() {
     const reels = document.querySelectorAll(".symbol");
-
-    // Reset eventuele oude win effecten
     reels.forEach(el => {
       el.classList.remove("win");
       el.style.animation = "";
     });
 
-    // Simuleer draai-animatie (visueel effect met vertraging)
     let result = [];
     for (let i = 0; i < reels.length; i++) {
       (function(i) {
@@ -178,46 +194,58 @@
           const sym = getRandomSymbol();
           reels[i].textContent = sym;
           result[i] = sym;
-
-          // Als laatste symbool is gezet, controleer op winst
-          if (i === reels.length - 1) {
-            checkWin(result);
-          }
-        }, i * 150); // 150ms vertraging per symbool
+          if (i === reels.length - 1) checkWin(result);
+        }, i * 150);
       })(i);
     }
   }
 
   function checkWin(symbols) {
-    // 3 rijen → elk met 3 symbolen
     const rows = [
       [symbols[0], symbols[1], symbols[2]],
       [symbols[3], symbols[4], symbols[5]],
       [symbols[6], symbols[7], symbols[8]],
     ];
 
-    let win = false;
+    let totalWin = 0;
+    let bonusRound = false;
 
     rows.forEach((row, index) => {
-      if (row[0] === row[1] && row[1] === row[2]) {
-        win = true;
-        // Highlight winnende rij
-        for (let i = 0; i < 3; i++) {
-          const reelIndex = index * 3 + i;
-          const reel = document.querySelectorAll(".symbol")[reelIndex];
-          reel.style.animation = "blink 1s ease-in-out infinite alternate";
-        }
+      if (row.every(sym => sym === row[0])) {
+        highlightRow(index);
+        totalWin += currentBet * 10;
+      } else if (row.includes("🃏") && row.filter(sym => sym !== "🃏").length === 1) {
+        highlightRow(index);
+        totalWin += currentBet * 5;
       }
     });
 
-    if (win) {
-      alert(`🎉 Je wint ${currentBet * 10} $MEME!`);
+    const bonusCount = symbols.filter(s => s === "🎁").length;
+    if (bonusCount >= 2) {
+      bonusRound = true;
+      totalWin += bonusCount * currentBet * 2;
+      alert(`🎁 BONUSRONDE! Je hebt ${bonusCount} bonussymbolen.`);
+    }
+
+    if (totalWin > 0) {
+      balance += totalWin;
+      document.getElementById('win-display').textContent = `Winst: ${totalWin} $MEME`;
     } else {
-      alert("😢 Geen winst, probeer opnieuw!");
+      balance -= currentBet;
+      document.getElementById('win-display').textContent = `Winst: 0`;
+    }
+
+    updateUI();
+  }
+
+  function highlightRow(rowIndex) {
+    for (let i = 0; i < 3; i++) {
+      const reelIndex = rowIndex * 3 + i;
+      const reel = document.querySelectorAll(".symbol")[reelIndex];
+      reel.style.animation = "blink 1s ease-in-out infinite alternate";
     }
   }
 
-  // Phantom & MetaMask connect (gelijk aan eerder)
   function connectPhantom() {
     if (window.solana && window.solana.isPhantom) {
       window.solana.connect().then(res => {
@@ -239,9 +267,8 @@
       });
     } else {
       alert("⚠️ MetaMask is niet geïnstalleerd.");
-  
-      }
     }
-  </script>
+  }
+</script>
 </body>
 </html>
