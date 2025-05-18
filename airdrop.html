@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎰 Slot Machine</title>
+  <title>🎰 MemeCoin Slots</title>
   <style>
     @keyframes blink {
       0% { background-color: #222; }
@@ -45,81 +45,47 @@
       background: #ffaa00;
     }
 
-    #game-area {
+    #airdrop-area {
       margin: 40px auto;
       max-width: 600px;
     }
 
-    .reels {
-      display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-template-rows: repeat(3, 100px);
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .symbol {
+    .airdrop-card {
       background: #222;
       border: 2px solid #555;
       border-radius: 10px;
-      font-size: 2em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 20px;
+      margin-bottom: 20px;
     }
 
-    .controls {
-      margin: 20px;
+    .airdrop-card h3 {
+      margin-top: 0;
+      color: #ffcc00;
     }
 
-    button {
-      padding: 10px 20px;
-      margin: 5px;
-      border: none;
-      border-radius: 5px;
+    .airdrop-card button {
       background: #ffcc00;
       color: black;
       font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
 
-    button:hover {
+    .airdrop-card button:hover {
       background: #ffaa00;
     }
 
-    #bet-display {
+    #airdrop-message {
       font-size: 1.2em;
-      margin-bottom: 10px;
-    }
-
-    .wallet-buttons {
-      margin-top: 30px;
-    }
-
-    .wallet-buttons button {
-      background: #444;
-      color: white;
-    }
-
-    .wallet-buttons button:hover {
-      background: #666;
-    }
-
-    #balance-display {
-      font-size: 1.2em;
-      margin-top: 20px;
-    }
-
-    #win-display {
-      font-size: 1.2em;
-      margin-top: 10px;
       color: #00ff88;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <header>🎰 MemeCoin Slots</header>
+  <header>🎁 MemeCoin Airdrops</header>
 
   <nav>
     <a href="index.html">🏠 Home</a>
@@ -128,121 +94,40 @@
     <a href="submit-token.html">📬 Submit</a>
   </nav>
 
-  <main id="game-area">
-    <div id="bet-display">Inzet: <span id="current-bet">1</span> $MEME</div>
-    <div id="balance-display">Balans: <span id="current-balance">100</span> $MEME</div>
-    <div id="win-display">Winst: 0</div>
-
-    <div class="controls">
-      <button onclick="changeBet(-1)">➖ Verlaag Inzet</button>
-      <button onclick="changeBet(1)">➕ Verhoog Inzet</button>
+  <main id="airdrop-area">
+    <div class="airdrop-card">
+      <h3>Claim je gratis $MEME tokens</h3>
+      <button onclick="claimAirdrop()">📥 Claim Airdrop</button>
+      <div id="airdrop-message"></div>
     </div>
 
-    <div class="reels" id="reels">
-      <div class="symbol">🍒</div>
-      <div class="symbol">🍋</div>
-      <div class="symbol">🍉</div>
-      <div class="symbol">🍇</div>
-      <div class="symbol">⭐</div>
-      <div class="symbol">🔔</div>
-      <div class="symbol">🍀</div>
-      <div class="symbol">💎</div>
-      <div class="symbol">🔥</div>
-    </div>
-
-    <div class="controls">
-      <button onclick="spin()">🎰 Spin</button>
-    </div>
-
-    <div class="wallet-buttons">
-      <h3>Wallet Connect</h3>
+    <div class="airdrop-card">
+      <h3>Connect je wallet</h3>
       <button onclick="connectPhantom()">🔗 Connect Phantom</button>
-      <button onclick="connectMetaMask()">🦊 Connect MetaMask</button>
     </div>
   </main>
+
 <script>
-  const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐", "🔔", "🍀", "💎", "🔥", "🃏", "🎁"];
-  let currentBet = 1;
-  let balance = 100;
+  let airdropClaimed = false;
+  let airdropAmount = 50;
 
-  function updateUI() {
-    document.getElementById('current-bet').textContent = currentBet;
-    document.getElementById('current-balance').textContent = balance;
-  }
-
-  function changeBet(amount) {
-    currentBet += amount;
-    if (currentBet < 1) currentBet = 1;
-    updateUI();
-  }
-
-  function getRandomSymbol() {
-    return symbols[Math.floor(Math.random() * symbols.length)];
-  }
-
-  function spin() {
-    const reels = document.querySelectorAll(".symbol");
-    reels.forEach(el => {
-      el.classList.remove("win");
-      el.style.animation = "";
-    });
-
-    let result = [];
-    for (let i = 0; i < reels.length; i++) {
-      (function(i) {
-        setTimeout(() => {
-          const sym = getRandomSymbol();
-          reels[i].textContent = sym;
-          result[i] = sym;
-          if (i === reels.length - 1) checkWin(result);
-        }, i * 150);
-      })(i);
-    }
-  }
-
-  function checkWin(symbols) {
-    const rows = [
-      [symbols[0], symbols[1], symbols[2]],
-      [symbols[3], symbols[4], symbols[5]],
-      [symbols[6], symbols[7], symbols[8]],
-    ];
-
-    let totalWin = 0;
-    let bonusRound = false;
-
-    rows.forEach((row, index) => {
-      if (row.every(sym => sym === row[0])) {
-        highlightRow(index);
-        totalWin += currentBet * 10;
-      } else if (row.includes("🃏") && row.filter(sym => sym !== "🃏").length === 1) {
-        highlightRow(index);
-        totalWin += currentBet * 5;
-      }
-    });
-
-    const bonusCount = symbols.filter(s => s === "🎁").length;
-    if (bonusCount >= 2) {
-      bonusRound = true;
-      totalWin += bonusCount * currentBet * 2;
-      alert(`🎁 BONUSRONDE! Je hebt ${bonusCount} bonussymbolen.`);
+  function claimAirdrop() {
+    if (airdropClaimed) {
+      document.getElementById("airdrop-message").textContent = "❌ Je hebt al geclaimd.";
+      return;
     }
 
-    if (totalWin > 0) {
-      balance += totalWin;
-      document.getElementById('win-display').textContent = `Winst: ${totalWin} $MEME`;
+    if (window.solana && window.solana.isPhantom) {
+      window.solana.connect().then(res => {
+        const pubKey = res.publicKey.toString();
+        // Hier zou je backend-aanroep doen om daadwerkelijk $MEME te versturen
+        airdropClaimed = true;
+        document.getElementById("airdrop-message").textContent = `✅ ${airdropAmount} $MEME tokens verzonden naar ${pubKey}`;
+      }).catch(err => {
+        document.getElementById("airdrop-message").textContent = "❌ Verbinden mislukt: " + err.message;
+      });
     } else {
-      balance -= currentBet;
-      document.getElementById('win-display').textContent = `Winst: 0`;
-    }
-
-    updateUI();
-  }
-
-  function highlightRow(rowIndex) {
-    for (let i = 0; i < 3; i++) {
-      const reelIndex = rowIndex * 3 + i;
-      const reel = document.querySelectorAll(".symbol")[reelIndex];
-      reel.style.animation = "blink 1s ease-in-out infinite alternate";
+      document.getElementById("airdrop-message").textContent = "⚠️ Phantom Wallet niet gevonden.";
     }
   }
 
@@ -255,18 +140,6 @@
       });
     } else {
       alert("⚠️ Phantom Wallet is niet gevonden.");
-    }
-  }
-
-  function connectMetaMask() {
-    if (typeof window.ethereum !== 'undefined') {
-      window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
-        alert("✅ Verbonden met MetaMask: " + accounts[0]);
-      }).catch(err => {
-        alert("❌ Verbinden mislukt: " + err.message);
-      });
-    } else {
-      alert("⚠️ MetaMask is niet geïnstalleerd.");
     }
   }
 </script>
