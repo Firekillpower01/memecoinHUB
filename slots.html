@@ -4,76 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>🎰 PUMP RAIDERS - Slots</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-      font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
-    }
-    header {
-      padding: 20px;
-      background: #111;
-      font-size: 2em;
-      font-weight: bold;
-      color: #00ffd5;
-    }
-    nav {
-      margin: 20px;
-    }
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      margin: 10px;
-      padding: 10px 20px;
-      background: #00ffd5;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-    nav a:hover {
-      background: #00bfae;
-    }
-    .card {
-      background: #222;
-      border: 2px solid #444;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 600px;
-    }
-    button {
-      background: #00ffd5;
-      color: black;
-      font-weight: bold;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    button:hover {
-      background: #00bfae;
-    }
-    .slots {
-      display: grid;
-      grid-template-columns: repeat(5, 60px);
-      gap: 10px;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    .slot-cell {
-      background: #000;
-      border: 2px solid #00ffd5;
-      border-radius: 10px;
-      font-size: 2em;
-      padding: 15px;
-    }
-    #slot-result, #live-balance, #wallet-info, #last-win {
-      margin-top: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>🎰 PUMP RAIDERS - Slots</header>
@@ -108,57 +39,6 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script>
-    let memeBalance = 0;
-    let lastWin = 0;
-    const symbols = ['🍒', '💎', '🍋', '🔔', '⭐'];
-
-    function spinSlot() {
-      if (window.solana && window.solana.isPhantom) {
-        window.solana.connect().then(res => {
-          const grid = document.getElementById("slot-grid").children;
-          let resultSymbols = [];
-          for (let i = 0; i < grid.length; i++) {
-            const symbol = symbols[Math.floor(Math.random() * symbols.length)];
-            grid[i].textContent = symbol;
-            resultSymbols.push(symbol);
-          }
-          let win = 0;
-          const count = {};
-          resultSymbols.forEach(s => count[s] = (count[s] || 0) + 1);
-          for (const sym in count) {
-            if (count[sym] >= 3) {
-              win = count[sym] * 50;
-              break;
-            }
-          }
-          memeBalance += win;
-          lastWin = win;
-          if (win > 0) confetti();
-          document.getElementById("slot-result").textContent = win > 0
-            ? `🎉 Je hebt ${win} $MEME tokens gewonnen!`
-            : `😅 Geen winst deze keer. Probeer opnieuw!`;
-          document.getElementById("last-win").textContent = `🏆 Laatste winst: ${lastWin} $MEME`;
-          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
-        });
-      } else {
-        document.getElementById("slot-result").textContent = "⚠️ Phantom Wallet niet gevonden.";
-      }
-    }
-
-    function connectPhantom() {
-      if (window.solana && window.solana.isPhantom) {
-        window.solana.connect().then(res => {
-          const pubKey = res.publicKey.toString();
-          document.getElementById("wallet-info").textContent = `✅ Verbonden wallet: ${pubKey}`;
-          document.getElementById("live-balance").textContent = `💰 Huidige $MEME balans: ${memeBalance}`;
-        }).catch(err => {
-          alert("❌ Verbinden mislukt: " + err.message);
-        });
-      } else {
-        alert("⚠️ Phantom Wallet niet gevonden.");
-      }
-    }
-  </script>
+  <script src="js/slots.js"></script>
 </body>
 </html>
