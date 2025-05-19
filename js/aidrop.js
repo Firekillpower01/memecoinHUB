@@ -91,4 +91,8 @@ function showLeaderboard() {
     leaderboardDiv.appendChild(entry);
   });
 }
+export function showAirdropLogsAndLeaderboard() {
+  showAirdropLogs();
+  showLeaderboard();
+}
 
