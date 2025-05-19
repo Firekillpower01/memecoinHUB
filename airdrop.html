@@ -26,21 +26,19 @@
     <button id="airdrop-btn">🎁 Claim 50 $MEME</button>
     <div id="airdrop-message"></div>
     <div id="airdrop-logs" class="airdrop-log-container"></div>
-
   </main>
 
-<script> import { connectPhantom } from './js/main.js';
-import { claimAirdrop } from './js/airdrop.js';
+  <script type="module">
+    import { connectPhantom } from './js/main.js';
+    import { claimAirdrop } from './js/airdrop.js';
+    import { showAirdropLogs } from './js/airdrop.js';
 
-// Koppel functies aan knoppen
-document.getElementById('connect-btn').addEventListener('click', connectPhantom);
-document.getElementById('airdrop-btn').addEventListener('click', claimAirdrop);
+    // Koppel functies aan knoppen
+    document.getElementById('connect-btn').addEventListener('click', connectPhantom);
+    document.getElementById('airdrop-btn').addEventListener('click', claimAirdrop);
 
-// Toon logs bij laden
-import('./js/airdrop.js').then(module => {
-  module.showAirdropLogs?.();
-});
-
+    // Toon logs bij laden
+    showAirdropLogs();
   </script>
 </body>
 </html>
