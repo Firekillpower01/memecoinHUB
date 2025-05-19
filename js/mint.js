@@ -1,7 +1,8 @@
 // js/mint.js
 import { state } from './state.js';
 import { CONFIG } from './config.js';
-import { updateBalanceDisplay } from './main.js';
+import { updateBalanceDisplay } from './ui.js';
+
 
 export function mintTokens() {
   if (window.solana && window.solana.isPhantom) {
