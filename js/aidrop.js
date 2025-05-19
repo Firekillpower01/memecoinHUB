@@ -95,7 +95,11 @@ function showLeaderboard() {
   sorted.forEach(([wallet, amount], i) => {
     const entry = document.createElement("div");
     entry.className = "leaderboard-entry";
-    if (wallet === state.userWallet) entry.classList.add("glow"); // markeer huidige wallet
+    if (wallet === state.userWallet) {
+  entry.classList.add("glow");
+  setTimeout(() => entry.classList.remove("glow"), 2500); // fade-out
+}
+ // markeer huidige wallet
     entry.textContent = `#${i + 1} ${wallet.slice(0, 6)}... — ${amount} ${CONFIG.TOKEN_NAME}`;
     leaderboardDiv.appendChild(entry);
   });
