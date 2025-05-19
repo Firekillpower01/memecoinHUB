@@ -18,14 +18,3 @@ export function connectPhantom() {
     alert("⚠️ Phantom Wallet niet gevonden.");
   }
 }
-
-export function updateBalanceDisplay() {
-  const balanceEl = document.getElementById("live-balance");
-  if (balanceEl) {
-    if (typeof state.memeBalance === 'number') {
-      balanceEl.textContent = `💰 Huidige ${CONFIG.TOKEN_NAME} balans: ${state.memeBalance}`;
-    } else {
-      balanceEl.textContent = "⚠️ Ongeldige balanswaarde";
-    }
-  }
-}
