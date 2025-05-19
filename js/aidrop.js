@@ -9,6 +9,8 @@ export function claimAirdrop() {
     alert("⚠️ Verbind eerst je wallet.");
     return;
   }
+  showLeaderboard();
+
 
   state.memeBalance += CONFIG.AIRDROP_AMOUNT;
   updateBalanceDisplay();
@@ -21,6 +23,8 @@ export function claimAirdrop() {
 
   logAirdrop(state.userWallet, CONFIG.AIRDROP_AMOUNT);
   showAirdropLogs(); // Toon direct
+  showLeaderboard();
+
 }
 
 function logAirdrop(wallet, amount) {
@@ -59,3 +63,32 @@ function showTemporaryAlert(message) {
     alertBox.textContent = "";
   }, 3000);
 }
+function showLeaderboard() {
+  const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
+  const leaderboardDiv = document.getElementById("airdrop-leaderboard");
+  if (!leaderboardDiv) return;
+
+  // Aggregatie van totaal per wallet
+  const totals = {};
+  logs.forEach(log => {
+    if (!totals[log.wallet]) {
+      totals[log.wallet] = 0;
+    }
+    totals[log.wallet] += log.amount;
+  });
+
+  // Sorteer op hoogste totaalbedrag
+  const sorted = Object.entries(totals)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10); // Top 10
+
+  // Render leaderboard
+  leaderboardDiv.innerHTML = "<h3>🏆 Leaderboard</h3>";
+  sorted.forEach(([wallet, amount], i) => {
+    const entry = document.createElement("div");
+    entry.className = "leaderboard-entry";
+    entry.textContent = `#${i + 1} ${wallet.slice(0, 6)}... — ${amount} ${CONFIG.TOKEN_NAME}`;
+    leaderboardDiv.appendChild(entry);
+  });
+}
+
