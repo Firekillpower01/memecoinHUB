@@ -49,7 +49,11 @@ function showAirdropLogs() {
   logs.slice().reverse().forEach((log, i) => {
     const entry = document.createElement("div");
     entry.className = "log-entry";
-    if (i === 0) entry.classList.add("glow"); // nieuwste entry
+    if (i === 0) {
+  entry.classList.add("glow");
+  setTimeout(() => entry.classList.remove("glow"), 2500); // verwijder glow na 2.5s
+}
+ // nieuwste entry
     entry.textContent = `${log.wallet.slice(0, 6)}... • ${log.amount} ${CONFIG.TOKEN_NAME} • ${new Date(log.timestamp).toLocaleString()}`;
     logDiv.appendChild(entry);
   });
