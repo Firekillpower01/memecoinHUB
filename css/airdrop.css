@@ -169,4 +169,25 @@ button:hover {
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
+/* ✨ Glow animatie voor nieuwe entries */
+@keyframes glowEntry {
+  0% {
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 10px rgba(0, 255, 213, 0.7);
+  }
+  50% {
+    background-color: rgba(0, 255, 213, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 213, 0.9);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.log-entry.glow,
+.leaderboard-entry.glow {
+  animation: glowEntry 1.5s ease-out;
+  border-radius: 6px;
+}
 
