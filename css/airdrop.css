@@ -164,7 +164,10 @@ button:hover {
   }
 }
 /* Extra: zwevende particles rond knoppen */
-button::after {
+button::after { button {
+  position: relative; /* Dit beperkt de orb tot binnen de knop zelf */
+}
+
   content: '';
   position: absolute;
   top: -10px;
