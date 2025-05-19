@@ -10,36 +10,54 @@ body {
   padding: 0;
   transition: background-color 0.5s, color 0.5s;
   position: relative;
+  z-index: 1;
   overflow-x: hidden;
 }
 
-/* LED Strip achtergrond */
 body::before,
 body::after {
   content: "";
   position: fixed;
   z-index: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 200%;
+  height: 200%;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    135deg,
-    transparent,
-    transparent 30px,
-    rgba(0, 255, 213, 0.05) 30px,
-    rgba(255, 0, 255, 0.05) 60px
-  );
-  mix-blend-mode: screen;
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(0,255,213,0.08) 0px, rgba(0,255,213,0.08) 1px, transparent 1px, transparent 20px),
+    repeating-linear-gradient(-45deg, rgba(255,0,255,0.06) 0px, rgba(255,0,255,0.06) 1px, transparent 1px, transparent 20px);
+  animation: gridMove 60s linear infinite, gridPulse 4s ease-in-out infinite alternate;
+  opacity: 0.2;
+}
+
+body.light-mode::before,
+body.light-mode::after {
+  opacity: 0.05;
+  filter: invert(1);
+}
+
+@keyframes gridMove {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-200px, -200px);
+  }
+}
+
+@keyframes gridPulse {
+  0% {
+    opacity: 0.2;
+    filter: brightness(1);
+  }
+  100% {
+    opacity: 0.3;
+    filter: brightness(1.5);
+  }
 }
 
 body.light-mode {
   background-color: #f0f0f0;
   color: #1a1a1a;
-}
-
-body.light-mode::before,
-body.light-mode::after {
-  opacity: 0.1;
 }
 
 header {
@@ -52,7 +70,7 @@ header {
   letter-spacing: 1px;
   animation: glitch 1s infinite;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 nav {
@@ -62,7 +80,7 @@ nav {
   padding: 10px 0;
   gap: 15px;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 nav a {
@@ -85,7 +103,7 @@ main {
   margin: 0 auto;
   text-align: center;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 button {
@@ -99,8 +117,6 @@ button {
   font-size: 1.1rem;
   font-weight: bold;
   transition: box-shadow 0.3s, transform 0.2s;
-  position: relative;
-  z-index: 2;
 }
 
 button:hover {
