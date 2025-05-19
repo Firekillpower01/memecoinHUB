@@ -55,8 +55,6 @@ function showAirdropLogs() {
   });
 }
 
-}
-
 // --- TIJDELIJK BERICHT TONEN ---
 function showTemporaryAlert(message) {
   const alertBox = document.getElementById("airdrop-message");
@@ -73,12 +71,6 @@ function showTemporaryAlert(message) {
 
 // --- LEADERBOARD TONEN ---
 function showLeaderboard() {
-  const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
-  const leaderboardDiv = document.getElementById("airdrop-leaderboard");
-  if (!leaderboardDiv) return;
-
-  // Totaalbedragen per wallet berekenen
- function showLeaderboard() {
   const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
   const leaderboardDiv = document.getElementById("airdrop-leaderboard");
   if (!leaderboardDiv) return;
@@ -104,7 +96,6 @@ function showLeaderboard() {
     leaderboardDiv.appendChild(entry);
   });
 }
-
 
 // --- COMBINATIE: logs + leaderboard ---
 export function showAirdropLogsAndLeaderboard() {
