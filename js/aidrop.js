@@ -79,31 +79,44 @@ function showLeaderboard() {
   const leaderboardDiv = document.getElementById("airdrop-leaderboard");
   if (!leaderboardDiv) return;
 
+  // Bereken totaal per wallet
   const totals = {};
   logs.forEach(log => {
-    if (!totals[log.wallet]) {
-      totals[log.wallet] = 0;
-    }
+    if (!totals[log.wallet]) totals[log.wallet] = 0;
     totals[log.wallet] += log.amount;
   });
 
+  // Sorteer en pak top 10
   const sorted = Object.entries(totals)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10);
+
+  // Bepaal nieuwe positie van huidige gebruiker
+  const newIndex = sorted.findIndex(([wallet]) => wallet === state.userWallet);
+
+  // Vergelijk met vorige opgeslagen positie
+  const previousIndex = parseInt(localStorage.getItem('leaderboardPosition') ?? "-1");
+
+  // Update opgeslagen positie
+  localStorage.setItem('leaderboardPosition', newIndex);
 
   leaderboardDiv.innerHTML = "<h3>🏆 Leaderboard</h3>";
   sorted.forEach(([wallet, amount], i) => {
     const entry = document.createElement("div");
     entry.className = "leaderboard-entry";
+
     if (wallet === state.userWallet) {
-  entry.classList.add("glow");
-  setTimeout(() => entry.classList.remove("glow"), 2500); // fade-out
-}
- // markeer huidige wallet
+      if (newIndex !== previousIndex) {
+        entry.classList.add("glow");
+        setTimeout(() => entry.classList.remove("glow"), 2500);
+      }
+    }
+
     entry.textContent = `#${i + 1} ${wallet.slice(0, 6)}... — ${amount} ${CONFIG.TOKEN_NAME}`;
     leaderboardDiv.appendChild(entry);
   });
 }
+
 
 // --- COMBINATIE: logs + leaderboard ---
 export function showAirdropLogsAndLeaderboard() {
