@@ -13,6 +13,12 @@ export function claimAirdrop() {
   state.memeBalance += CONFIG.AIRDROP_AMOUNT;
   updateBalanceDisplay();
   showTemporaryAlert(`🎉 ${CONFIG.AIRDROP_AMOUNT} ${CONFIG.TOKEN_NAME} geclaimd!`);
+  confetti({
+  particleCount: 150,
+  spread: 70,
+  origin: { y: 0.6 }
+});
+
   logAirdrop(state.userWallet, CONFIG.AIRDROP_AMOUNT);
   showAirdropLogs(); // Toon direct
 }
