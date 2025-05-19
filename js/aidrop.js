@@ -17,7 +17,6 @@ export function claimAirdrop() {
   showAirdropLogs(); // Toon direct
 }
 
-}
 function logAirdrop(wallet, amount) {
   const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
   logs.push({
@@ -40,4 +39,17 @@ function showAirdropLogs() {
     entry.textContent = `${log.wallet.slice(0, 6)}... • ${log.amount} ${CONFIG.TOKEN_NAME} • ${new Date(log.timestamp).toLocaleString()}`;
     logDiv.appendChild(entry);
   });
+}
+
+function showTemporaryAlert(message) {
+  const alertBox = document.getElementById("airdrop-message");
+  if (!alertBox) return;
+
+  alertBox.textContent = message;
+  alertBox.style.opacity = 1;
+
+  setTimeout(() => {
+    alertBox.style.opacity = 0;
+    alertBox.textContent = "";
+  }, 3000);
 }
