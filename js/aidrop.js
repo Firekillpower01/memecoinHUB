@@ -78,25 +78,33 @@ function showLeaderboard() {
   if (!leaderboardDiv) return;
 
   // Totaalbedragen per wallet berekenen
+ function showLeaderboard() {
+  const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
+  const leaderboardDiv = document.getElementById("airdrop-leaderboard");
+  if (!leaderboardDiv) return;
+
   const totals = {};
   logs.forEach(log => {
-    totals[log.wallet] = (totals[log.wallet] || 0) + log.amount;
+    if (!totals[log.wallet]) {
+      totals[log.wallet] = 0;
+    }
+    totals[log.wallet] += log.amount;
   });
 
-  // Sorteer op hoogste totaalbedrag
   const sorted = Object.entries(totals)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 10); // Top 10
+    .slice(0, 10);
 
-  // HTML genereren
   leaderboardDiv.innerHTML = "<h3>🏆 Leaderboard</h3>";
   sorted.forEach(([wallet, amount], i) => {
     const entry = document.createElement("div");
     entry.className = "leaderboard-entry";
+    if (wallet === state.userWallet) entry.classList.add("glow"); // markeer huidige wallet
     entry.textContent = `#${i + 1} ${wallet.slice(0, 6)}... — ${amount} ${CONFIG.TOKEN_NAME}`;
     leaderboardDiv.appendChild(entry);
   });
 }
+
 
 // --- COMBINATIE: logs + leaderboard ---
 export function showAirdropLogsAndLeaderboard() {
