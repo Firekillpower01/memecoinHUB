@@ -1,7 +1,9 @@
 /* css/airdrop.css */
 
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
 body {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Audiowide', 'Orbitron', sans-serif;
   background-color: #0d0d0d;
   color: #00ffd5;
   margin: 0;
@@ -59,6 +61,7 @@ button {
   font-size: 1.1rem;
   font-weight: bold;
   transition: box-shadow 0.3s, transform 0.2s;
+  animation: flicker 2s infinite;
 }
 
 button:hover {
@@ -81,6 +84,7 @@ button:hover {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px #00ffd5;
+  animation: scanline 4s infinite alternate ease-in-out;
 }
 
 .log-entry,
@@ -138,5 +142,23 @@ button:hover {
   }
   100% {
     text-shadow: 2px 2px #ff00ff, -2px -2px #00ffd5;
+  }
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(2px);
   }
 }
