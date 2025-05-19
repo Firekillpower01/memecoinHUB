@@ -69,3 +69,22 @@ button:hover {
   font-size: 1.1em;
   color: #eee;
 }
+.airdrop-log-container {
+  margin-top: 40px;
+  background: #111;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #00ffd5;
+  box-shadow: 0 0 10px rgba(0,255,213,0.2);
+  color: white;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.log-entry {
+  margin-bottom: 8px;
+  font-family: monospace;
+  font-size: 0.95em;
+}
+
