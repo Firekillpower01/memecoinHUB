@@ -1,13 +1,14 @@
 // js/ui.js
 
 import { state } from './state.js';
+import { CONFIG } from './config.js';
 
 // Werk de zichtbare tokenbalans bij op de pagina
 export function updateBalanceDisplay() {
   const balanceEl = document.getElementById("live-balance");
   if (balanceEl) {
     if (typeof state.memeBalance === 'number') {
-      balanceEl.textContent = `💰 Huidige $MEME balans: ${state.memeBalance}`;
+      balanceEl.textContent = `💰 Huidige ${CONFIG.TOKEN_NAME} balans: ${state.memeBalance}`;
     } else {
       balanceEl.textContent = "⚠️ Ongeldige balanswaarde";
     }
@@ -20,7 +21,7 @@ export function showMintMessage(message) {
   if (el) el.textContent = message;
 }
 
-// (optioneel) Toon tijdelijke notificatie bovenin of ergens op de UI
+// Toon tijdelijke notificatie bovenin of ergens op de UI
 export function showTemporaryAlert(message, duration = 3000) {
   const alertBox = document.createElement('div');
   alertBox.textContent = message;
@@ -35,6 +36,7 @@ export function showTemporaryAlert(message, duration = 3000) {
     border-radius: 5px;
     z-index: 9999;
     font-weight: bold;
+    box-shadow: 0 0 10px #00ffd5;
   `;
   document.body.appendChild(alertBox);
   setTimeout(() => alertBox.remove(), duration);
