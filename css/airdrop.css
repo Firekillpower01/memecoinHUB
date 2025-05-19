@@ -1,14 +1,19 @@
 /* css/airdrop.css */
 
-@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron:wght@500;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
 
 body {
- font-family: 'Orbitron', 'Audiowide', sans-serif;
+  font-family: 'Audiowide', 'Orbitron', sans-serif;
   background-color: #0d0d0d;
   color: #00ffd5;
   margin: 0;
   padding: 0;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+body.light-mode {
+  background-color: #f0f0f0;
+  color: #1a1a1a;
 }
 
 header {
@@ -62,12 +67,32 @@ button {
   font-size: 1.1rem;
   font-weight: bold;
   transition: box-shadow 0.3s, transform 0.2s;
-  animation: flicker 2s infinite;
+  position: relative; /* Glow effect binnen knop beperken */
 }
 
 button:hover {
   box-shadow: 0 0 10px #00ffd5, 0 0 20px #ff00ff;
   transform: scale(1.05);
+}
+
+.toggle-theme-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1000;
+  background: transparent;
+  border: 2px solid #00ffd5;
+  color: #00ffd5;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'Audiowide', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.toggle-theme-btn:hover {
+  background: #00ffd5;
+  color: #000;
 }
 
 #airdrop-message {
@@ -146,64 +171,11 @@ button:hover {
   }
 }
 
-@keyframes flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    opacity: 1;
-  }
-  20%, 24%, 55% {
-    opacity: 0.4;
-  }
-}
-
 @keyframes scanline {
   0% {
     transform: translateY(-2px);
   }
   100% {
     transform: translateY(2px);
-  }
-}
-/* Extra: zwevende particles rond knoppen */
-button::after { button {
-  position: relative; /* Dit beperkt de orb tot binnen de knop zelf */
-}
-
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  width: calc(100% + 20px);
-  height: calc(100% + 20px);
-  border-radius: 10px;
-  background: radial-gradient(circle, #00ffd550 10%, transparent 70%);
-  animation: float-glow 4s infinite ease-in-out;
-  pointer-events: none;
-  z-index: -1;
-}
-
-@keyframes float-glow {
-  0% {
-    transform: scale(1) translateY(0px);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.05) translateY(-5px);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) translateY(0px);
-    opacity: 0.8;
-  }
-}
-
-/* Extra fade-ins */
-.fade-in {
-  animation: fadeInSmooth 1s ease-out forwards;
-  opacity: 0;
-}
-
-@keyframes fadeInSmooth {
-  to {
-    opacity: 1;
   }
 }
