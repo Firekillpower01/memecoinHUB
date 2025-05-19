@@ -27,32 +27,21 @@
     <div id="airdrop-message"></div>
     <div id="airdrop-logs" class="airdrop-log-container"></div>
     <div id="airdrop-leaderboard" class="airdrop-leaderboard-container"></div>
-
   </main>
 
+  <!-- Confetti bibliotheek -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Hoofdscript -->
   <script type="module">
     import { connectPhantom } from './js/main.js';
-    import { claimAirdrop } from './js/airdrop.js';
-    import { showAirdropLogs } from './js/airdrop.js';
+    import { claimAirdrop, showAirdropLogsAndLeaderboard } from './js/airdrop.js';
 
-    // Koppel functies aan knoppen
     document.getElementById('connect-btn').addEventListener('click', connectPhantom);
     document.getElementById('airdrop-btn').addEventListener('click', claimAirdrop);
 
-    // Toon logs bij laden
-    showAirdropLogs();
+    // Toon logs en leaderboard bij laden
+    showAirdropLogsAndLeaderboard();
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script type="module">
-  import { connectPhantom } from './js/main.js';
-  import { claimAirdrop, showAirdropLogsAndLeaderboard } from './js/airdrop.js';
-
-  document.getElementById('connect-btn').addEventListener('click', connectPhantom);
-  document.getElementById('airdrop-btn').addEventListener('click', claimAirdrop);
-
-  // Toon logs + leaderboard bij laden
-  showAirdropLogsAndLeaderboard();
-</script>
-
 </body>
 </html>
