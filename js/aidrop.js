@@ -5,9 +5,39 @@ import { state } from './state.js';
 import { updateBalanceDisplay } from './main.js';
 
 export function claimAirdrop() {
+  if (!state.userWallet) {
+    alert("⚠️ Verbind eerst je wallet.");
+    return;
+  }
+
   state.memeBalance += CONFIG.AIRDROP_AMOUNT;
   updateBalanceDisplay();
+  showTemporaryAlert(`🎉 ${CONFIG.AIRDROP_AMOUNT} ${CONFIG.TOKEN_NAME} geclaimd!`);
+  logAirdrop(state.userWallet, CONFIG.AIRDROP_AMOUNT);
+  showAirdropLogs(); // Toon direct
+}
 
-  const msg = `🎁 Je hebt ${CONFIG.AIRDROP_AMOUNT} ${CONFIG.TOKEN_NAME} ontvangen!`;
-  document.getElementById("airdrop-message").textContent = msg;
+}
+function logAirdrop(wallet, amount) {
+  const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
+  logs.push({
+    wallet,
+    amount,
+    timestamp: new Date().toISOString()
+  });
+  localStorage.setItem('airdropLogs', JSON.stringify(logs));
+}
+
+function showAirdropLogs() {
+  const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
+  const logDiv = document.getElementById("airdrop-logs");
+  if (!logDiv) return;
+
+  logDiv.innerHTML = "<h3>📜 Airdrop Log</h3>";
+  logs.slice().reverse().forEach(log => {
+    const entry = document.createElement("div");
+    entry.className = "log-entry";
+    entry.textContent = `${log.wallet.slice(0, 6)}... • ${log.amount} ${CONFIG.TOKEN_NAME} • ${new Date(log.timestamp).toLocaleString()}`;
+    logDiv.appendChild(entry);
+  });
 }
