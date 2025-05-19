@@ -2,7 +2,7 @@
 
 import { CONFIG } from './config.js';
 import { state } from './state.js';
-import { updateBalanceDisplay } from './main.js';
+import { updateBalanceDisplay, showTemporaryAlert } from './ui.js';
 
 // --- AIRDROP CLAIM ---
 export function claimAirdrop() {
@@ -59,19 +59,6 @@ function showAirdropLogs() {
   });
 }
 
-// --- TIJDELIJK BERICHT TONEN ---
-function showTemporaryAlert(message) {
-  const alertBox = document.getElementById("airdrop-message");
-  if (!alertBox) return;
-
-  alertBox.textContent = message;
-  alertBox.style.opacity = 1;
-
-  setTimeout(() => {
-    alertBox.style.opacity = 0;
-    alertBox.textContent = "";
-  }, 3000);
-}
 
 // --- LEADERBOARD TONEN ---
 function showLeaderboard() {
