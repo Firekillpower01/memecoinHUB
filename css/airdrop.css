@@ -112,4 +112,17 @@ button:hover {
   0% { transform: translateX(-100%) rotate(25deg); }
   100% { transform: translateX(100%) rotate(25deg); }
 }
+.airdrop-log-container {
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0, 255, 213, 0.05);
+  border: 1px solid #00ffd5;
+  border-radius: 8px;
+}
+
+.log-entry {
+  margin-bottom: 5px;
+  font-family: monospace;
+  color: #00ffd5;
+}
 
