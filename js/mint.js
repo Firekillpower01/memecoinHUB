@@ -1,25 +1,43 @@
 // js/mint.js
+
 import { state } from './state.js';
 import { CONFIG } from './config.js';
-import { updateBalanceDisplay } from './ui.js';
+import { updateBalanceDisplay, showTemporaryAlert } from './ui.js';
 
-
+// 🚀 Token Mint Functie
 export function mintTokens() {
   if (window.solana && window.solana.isPhantom) {
     window.solana.connect()
       .then(res => {
+        // Voeg tokens toe aan oefensaldo
         state.memeBalance += CONFIG.TOKEN_INCREMENT;
-        confetti();  // Zorg dat canvas-confetti geladen is
-        document.getElementById("mint-message").textContent = 
-          `✅ ${CONFIG.TOKEN_INCREMENT} ${CONFIG.TOKEN_NAME} tokens toegevoegd aan je wallet!`;
+
+        // 🎉 Confetti animatie
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#00ffd5', '#00bfae', '#00ffae']
+        });
+
+        // ✅ Toon succesmelding
+        const message = `✅ ${CONFIG.TOKEN_INCREMENT} ${CONFIG.TOKEN_NAME} toegevoegd aan je wallet!`;
+        document.getElementById("mint-message").textContent = message;
+
+        // 🔁 Update visuele balans
         updateBalanceDisplay();
+
+        // 💬 Optioneel: tijdelijke alert met stijl
+        showTemporaryAlert(message);
       })
       .catch(err => {
-        document.getElementById("mint-message").textContent = 
-          "❌ Verbinden mislukt: " + err.message;
+        // ❌ Mislukt
+        document.getElementById("mint-message").textContent =
+          `❌ Verbinden mislukt: ${err.message}`;
       });
   } else {
-    document.getElementById("mint-message").textContent = 
+    // ⚠️ Geen Phantom Wallet
+    document.getElementById("mint-message").textContent =
       "⚠️ Phantom Wallet niet gevonden.";
   }
 }
