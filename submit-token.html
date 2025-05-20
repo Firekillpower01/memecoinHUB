@@ -3,170 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🚀 Submit MemeCoin</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: radial-gradient(circle at top, #0f0f0f, #090a10);
-      color: #00ffd5;
-      font-family: 'Orbitron', monospace;
-      overflow-x: hidden;
-    }
-
-    header {
-      text-align: center;
-      padding: 40px 20px;
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: #00ffd5;
-      background: linear-gradient(90deg, #000 0%, #111 100%);
-      text-shadow: 0 0 8px #00ffd5;
-      letter-spacing: 2px;
-      border-bottom: 2px solid #00ffd5;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      padding: 20px;
-      background-color: #111;
-      border-bottom: 1px solid #00ffd5;
-    }
-
-    nav a {
-      padding: 10px 20px;
-      background: #000;
-      border: 1px solid #00ffd5;
-      border-radius: 5px;
-      color: #00ffd5;
-      text-decoration: none;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-
-    nav a:hover {
-      background: #00ffd5;
-      color: #000;
-      text-shadow: none;
-    }
-
-    main {
-      padding: 40px 20px;
-      max-width: 700px;
-      margin: auto;
-      background: rgba(0, 255, 213, 0.05);
-      border: 1px dashed #00ffd5;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0, 255, 213, 0.2);
-      animation: fadeIn 0.8s ease-out;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-      color: #ffffff;
-      text-shadow: 0 0 6px #00ffd5;
-    }
-
-    p {
-      font-size: 1rem;
-      color: #ccc;
-      margin-bottom: 30px;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    label {
-      font-weight: bold;
-      color: #00ffd5;
-    }
-
-    input,
-    textarea {
-      padding: 12px;
-      font-family: monospace;
-      background: #111;
-      border: 1px solid #00ffd5;
-      color: #0ff;
-      border-radius: 6px;
-      resize: vertical;
-    }
-
-    button {
-      background: #00ffd5;
-      color: #000;
-      border: none;
-      padding: 14px;
-      font-size: 1em;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background: #00bfae;
-    }
-
-    .confirmation {
-      margin-top: 30px;
-      color: #0f0;
-      font-weight: bold;
-      text-align: center;
-      display: none;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+  <title>📬 Submit MemeCoin</title>
+  <link rel="stylesheet" href="css/airdrop.css" />
 </head>
 <body>
+  <button class="toggle-theme-btn">🌗</button>
 
-  <header>📨 Submit MemeCoin</header>
+  <header>📬 Submit je MemeCoin</header>
 
-  <nav>
+  <nav class="site-nav">
     <a href="index.html">🏠 Home</a>
-    <a href="slots.html">🎰 Slot Game</a>
+    <a href="slots.html">🎰 Slots</a>
     <a href="mint.html">🪙 Mint</a>
-    <a href="airdrop.html">🎁 Airdrops</a>
-    <a href="leaderboard.html">📊 Leaderboard</a>
-    <a href="logs.html">📝 Logs</a>
-    <a href="submit-token.html" class="active">📨 Submit</a>
+    <a href="airdrop.html">🎁 Airdrop</a>
   </nav>
 
   <main>
-    <h2>Dien jouw MemeCoin project in</h2>
-    <p>Wil jij jouw token toevoegen aan de hub? Vul het formulier hieronder volledig in:</p>
+    <p>Dien jouw MemeCoin in om kans te maken op een feature op het platform.</p>
 
-    <form id="submit-form">
-      <label for="project-name">🔹 Projectnaam</label>
+    <form id="submit-form" class="sci-fi-form">
+      <label for="project-name">🪐 Projectnaam</label>
       <input type="text" id="project-name" name="project-name" required />
 
-      <label for="mint-address">🔹 Mint Address</label>
+      <label for="mint-address">🎯 Mint Address</label>
       <input type="text" id="mint-address" name="mint-address" required />
 
-      <label for="website">🔹 Website (optioneel)</label>
+      <label for="website">🔗 Website (optioneel)</label>
       <input type="url" id="website" name="website" />
 
-      <label for="description">🔹 Beschrijving</label>
-      <textarea id="description" name="description" rows="4" required></textarea>
+      <label for="description">📄 Beschrijving</label>
+      <textarea id="description" name="description" rows="5" required></textarea>
 
-      <button type="submit">🚀 Verstuur Project</button>
+      <button type="submit" class="glitch-button">✅ Verzenden</button>
     </form>
 
-    <div class="confirmation" id="confirmation-message">
-      ✅ Dank je wel! Je project is succesvol ontvangen.
+    <div class="confirmation" id="confirmation-message" style="display: none;">
+      ✅ Dank je wel! Je project is succesvol ingediend.
     </div>
   </main>
 
@@ -176,7 +48,10 @@
       document.getElementById('confirmation-message').style.display = 'block';
       this.reset();
     });
-  </script>
 
+    document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
+  </script>
 </body>
 </html>
