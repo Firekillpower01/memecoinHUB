@@ -3,38 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pump Raiders Airdrop</title>
-  <link rel="stylesheet" href="css/airdrop.css" />
+  <title>PUMP RAIDERS — MemeCoin Hub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Dark/Light toggle knop -->
-  <button class="toggle-theme-btn">🌗</button>
+  <!-- Toggle voor dark/light thema -->
+  <button class="toggle-theme-btn" title="Toggle Light/Dark Mode">🌗</button>
 
   <!-- Header -->
-  <header>🚀 Claim je gratis airdrop</header>
+  <header>🚀 PUMP RAIDERS — MemeCoin Hub</header>
 
-  <!-- Navigatie (optioneel) -->
+  <!-- Navigatie -->
   <nav>
-    <a href="#">Home</a>
-    <a href="#">Airdrop</a>
-    <a href="#">Leaderboard</a>
+    <a href="slots.html">🎰 Slot Game</a>
+    <a href="mint.html">🪙 Token Mint</a>
+    <a href="airdrop.html">🎁 Airdrop</a>
+    <a href="submit-token.html">📬 Submit Token</a>
   </nav>
 
   <!-- Main content -->
   <main>
-    <p id="wallet-info">🔌 Verbind je wallet om te beginnen</p>
-    <button onclick="claimAirdrop()">🎁 Claim Airdrop</button>
-    <div id="airdrop-message"></div>
+    <section class="card">
+      <h2>Welkom bij PUMP RAIDERS</h2>
+      <p>Ontdek de ultieme sci-fi MemeCoin ervaring: verdien, speel en promoot jouw token!</p>
+      <button onclick="location.href='airdrop.html'">🎁 Start met je Airdrop</button>
+    </section>
 
-    <!-- Logs en Leaderboard -->
-    <div class="airdrop-log-container" id="airdrop-logs"></div>
-    <div class="airdrop-leaderboard-container" id="airdrop-leaderboard"></div>
+    <section class="card">
+      <h3>Wat kun je hier doen?</h3>
+      <ul style="list-style: none; padding: 0;">
+        <li>🚀 Claim gratis airdrops</li>
+        <li>🎰 Speel de slot machine en win meer</li>
+        <li>🪙 Mint test tokens (SPL)</li>
+        <li>📬 Submit je eigen MemeCoin project</li>
+      </ul>
+    </section>
   </main>
 
-  <!-- Scripts -->
-  <script type="module" src="js/airdrop.js"></script>
+  <!-- Optionele achtergrond scan grid is via CSS al aanwezig -->
 
-  <!-- Toggle light/dark functionaliteit -->
+  <!-- Dark/Light mode functionaliteit -->
   <script>
     document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
