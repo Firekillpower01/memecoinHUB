@@ -3,11 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Slot Game | Pump Raiders</title>
+  <title>Pump Raiders Slot Game</title>
   <link rel="stylesheet" href="css/airdrop.css" />
   <style>
-    body {
-      font-family: 'Orbitron', sans-serif;
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.015),
+        rgba(255, 255, 255, 0.015) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 9999;
     }
 
     main {
@@ -25,20 +36,24 @@
       width: 100%;
       backdrop-filter: blur(5px);
       box-shadow: 0 0 20px #00ffd5aa;
+      animation: glowPulse 2s ease-in-out infinite alternate;
     }
 
-    .reels {
+    @keyframes glowPulse {
+      from { box-shadow: 0 0 10px #00ffd5aa; }
+      to { box-shadow: 0 0 25px #00ffd5ee; }
+    }
+
+    .reels-grid {
       display: grid;
-      grid-template-columns: repeat(5, 60px);
-      grid-template-rows: repeat(3, 60px);
-      gap: 10px;
+      grid-template-columns: repeat(5, 70px);
+      grid-template-rows: repeat(5, 70px);
+      gap: 5px;
       justify-content: center;
       margin: 30px 0;
     }
 
     .reel {
-      width: 60px;
-      height: 60px;
       background: black;
       color: #00ffd5;
       font-size: 2em;
@@ -48,34 +63,55 @@
       border: 2px solid #444;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffd5aa;
+      transition: transform 0.4s ease;
+    }
+
+    .reel.spin {
+      animation: spinAnim 0.5s ease-in-out;
+    }
+
+    @keyframes spinAnim {
+      0% { transform: rotateX(0deg); opacity: 0.3; }
+      50% { transform: rotateX(360deg); opacity: 1; }
+      100% { transform: rotateX(0deg); }
+    }
+
+    .reel.win {
+      animation: pulseWin 1s infinite alternate;
+      color: #fff700;
+    }
+
+    @keyframes pulseWin {
+      from { box-shadow: 0 0 5px #fffb00; }
+      to { box-shadow: 0 0 20px #ffee00; transform: scale(1.05); }
+    }
+
+    #slot-message {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00ffae;
+      margin-bottom: 15px;
+    }
+
+    .btn-row {
+      margin-top: 10px;
     }
 
     button {
       background: #00ffd5;
       color: black;
       font-weight: bold;
-      padding: 12px 24px;
+      padding: 10px 18px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       font-size: 1em;
-      margin: 5px;
+      transition: background 0.3s;
+      margin: 0 5px;
     }
 
     button:hover {
       background: #00bfae;
-    }
-
-    #slot-message, #balance-display, #bonus-display {
-      margin-top: 15px;
-      font-size: 1.1em;
-      color: #00ff88;
-    }
-
-    input[type="number"] {
-      width: 100px;
-      padding: 5px;
-      margin-left: 10px;
     }
 
     nav a {
@@ -93,25 +129,31 @@
       background: #00bfae;
     }
 
-    body::before {
-      content: "";
+    #balance-display, #bonus-spins {
+      color: #00ffd5;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .toggle-theme-btn {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.02),
-        rgba(255, 255, 255, 0.02) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 9999;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: 2px solid #00ffd5;
+      color: #00ffd5;
+      font-size: 1.2em;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10000;
     }
   </style>
 </head>
 <body>
   <button class="toggle-theme-btn">🌗</button>
-  <header>🎰 Slot Game</header>
+
+  <header>🎰 Pump Raiders Slot Game</header>
+
   <nav>
     <a href="index.html">🏠 Home</a>
     <a href="slots.html">🎰 Slot Game</a>
@@ -121,163 +163,28 @@
 
   <main>
     <section class="slot-machine-container">
-      <h2>Speel & Win</h2>
+      <div id="balance-display">💰 Balans: 1.00 SOL</div>
+      <div id="bonus-spins" style="display:none">🌀 Bonus Spins: 10</div>
+      <div id="slot-message">➡️ Druk op Spin om te beginnen</div>
 
-      <div class="reels" id="reels"></div>
-
-      <div>
-        Inzet (SOL):
-        <input type="number" id="bet-amount" value="0.01" step="0.01" min="0.01" />
-        <button id="spin-button">🎲 Spin</button>
+      <div class="reels-grid" id="reels-grid">
+        <!-- 5x5 = 25 reels worden gegenereerd door JS -->
       </div>
 
-      <div id="slot-message">⬅️ Druk op spin</div>
-      <div id="balance-display">💰 Saldo: 10.00 SOL</div>
-      <div id="bonus-display"></div>
+      <div class="btn-row">
+        <button id="spin-button">🎲 Spin</button>
+        <button id="increase-bet">➕ Inzet</button>
+        <button id="decrease-bet">➖ Inzet</button>
+        <input type="number" id="custom-bet" min="0.01" step="0.01" value="0.01" style="width:80px; margin-left:10px;">
+      </div>
     </section>
   </main>
 
+  <script type="module" src="js/slots.js"></script>
   <script>
-    const symbols = ['🍒', '🍋', '🍉', '⭐', '🔔', '💎', '7️⃣', '🔥']; // 🔥 = wild
-    const symbolValues = {
-      '🍒': 1,
-      '🍋': 1,
-      '🍉': 2,
-      '⭐': 2,
-      '🔔': 3,
-      '💎': 3,
-      '7️⃣': 5,
-      '🔥': 0 // wild
-    };
-
-    const reelsContainer = document.getElementById('reels');
-    const spinButton = document.getElementById('spin-button');
-    const slotMessage = document.getElementById('slot-message');
-    const balanceDisplay = document.getElementById('balance-display');
-    const bonusDisplay = document.getElementById('bonus-display');
-    const betInput = document.getElementById('bet-amount');
-
-    let balance = 10.00;
-    let bonusSpins = 0;
-    const rows = 3;
-    const cols = 5;
-    let grid = [];
-
-    const winlines = [
-      [0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14], // horizontaal
-      [0,6,12,8,4], [10,6,2,8,14], // diagonalen
-      [0,6,7,8,9], [5,1,2,3,4], [5,11,7,13,14], [10,6,7,3,4],
-      [10,11,12,13,9], [0,6,12,13,14], [5,1,7,3,4], [10,6,7,8,4],
-      [0,1,7,3,14], [5,6,7,8,13], [5,6,12,8,4], [5,11,12,13,4],
-      [0,1,2,8,14], [10,11,12,8,4], [0,6,12,13,9],
-      [5,1,2,3,9], [10,6,2,8,4], [0,6,7,13,14], [10,11,7,3,4],
-      [5,6,7,8,9] // totaal 25
-    ];
-
-    function generateGrid() {
-      grid = [];
-      reelsContainer.innerHTML = '';
-      for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-          const symbol = symbols[Math.floor(Math.random() * symbols.length)];
-          grid.push(symbol);
-          const reel = document.createElement('div');
-          reel.className = 'reel';
-          reel.textContent = symbol;
-          reelsContainer.appendChild(reel);
-        }
-      }
-    }
-
-    function checkWinlines(grid, isBonusRound) {
-      let totalWin = 0;
-      let wildCount = 0;
-      let triggeredBonus = false;
-
-      winlines.forEach(line => {
-        const symbolsInLine = line.map(i => grid[i]);
-        const counts = {};
-        let consecutive = 0;
-        let prev = null;
-
-        symbolsInLine.forEach(sym => {
-          if (sym === prev || sym === '🔥' || prev === '🔥') {
-            consecutive++;
-          } else {
-            consecutive = 1;
-          }
-          prev = sym;
-          counts[sym] = (counts[sym] || 0) + 1;
-        });
-
-        Object.entries(counts).forEach(([symbol, count]) => {
-          if (symbol === '🔥') wildCount = count;
-          if (symbolValues[symbol] && count >= 3) {
-            let baseWin = symbolValues[symbol] * count;
-            if (isBonusRound) {
-              if (wildCount === 2) baseWin *= 2;
-              else if (wildCount === 3) baseWin *= 3;
-              else if (wildCount === 4) baseWin *= 5;
-              else if (wildCount >= 5) baseWin *= 10;
-            }
-            if (symbol === '7️⃣' && count === 5 && isBonusRound) {
-              baseWin *= 25;
-              slotMessage.textContent = '💰 JACKPOT! 5x 7️⃣ in bonus!';
-            }
-            totalWin += baseWin;
-          }
-        });
-
-        // Start bonusgame alleen bij exact 3 wilds in winlijn
-        if (symbolsInLine.filter(sym => sym === '🔥').length === 3) {
-          triggeredBonus = true;
-        }
-      });
-
-      return { totalWin, triggeredBonus };
-    }
-
-    function spinSlots() {
-      const bet = parseFloat(betInput.value);
-      if (isNaN(bet) || bet <= 0 || bet > balance) {
-        slotMessage.textContent = '⚠️ Ongeldige inzet!';
-        return;
-      }
-
-      if (bonusSpins > 0) {
-        bonusSpins--;
-        bonusDisplay.textContent = `🌀 Bonus Spins over: ${bonusSpins}`;
-      } else {
-        balance -= bet;
-      }
-
-      generateGrid();
-
-      const { totalWin, triggeredBonus } = checkWinlines(grid, bonusSpins > 0);
-      const profit = totalWin * bet;
-
-      if (profit > 0) {
-        balance += profit;
-        slotMessage.textContent = `🎉 Gewonnen: ${profit.toFixed(2)} SOL`;
-      } else {
-        slotMessage.textContent = '❌ Geen winst, probeer opnieuw!';
-      }
-
-      if (triggeredBonus && bonusSpins === 0) {
-        bonusSpins = 10;
-        bonusDisplay.textContent = `🌀 Bonus Spins gestart! Je hebt ${bonusSpins} gratis spins`;
-      }
-
-      balanceDisplay.textContent = `💰 Saldo: ${balance.toFixed(2)} SOL`;
-      if (bonusSpins === 0) bonusDisplay.textContent = '';
-    }
-
-    spinButton.addEventListener('click', spinSlots);
     document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
     });
-
-    generateGrid(); // Start met initiële grid
   </script>
 </body>
 </html>
