@@ -6,6 +6,21 @@
   <title>Slot Game | Pump Raiders</title>
   <link rel="stylesheet" href="css/airdrop.css" />
   <style>
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
     main {
       display: grid;
       place-items: center;
@@ -13,13 +28,13 @@
     }
 
     .slot-machine-container {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid #00ffd5;
       border-radius: 10px;
       padding: 30px;
       max-width: 700px;
       width: 100%;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(6px);
       box-shadow: 0 0 20px #00ffd5aa;
       animation: glowPulse 2s ease-in-out infinite alternate;
     }
@@ -54,48 +69,37 @@
       box-shadow: 0 0 10px #00ffd5aa;
     }
 
-    button {
-      background: #00ffd5;
-      color: black;
-      font-weight: bold;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #00bfae;
+    .slot-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
     }
 
     .slot-result {
       margin-top: 20px;
       font-weight: bold;
       color: #00ff88;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-family: 'Courier New', Courier, monospace;
+      box-shadow: inset 0 0 5px #00ff8855;
     }
 
     #wallet-info {
-      margin-top: 10px;
+      margin-top: 20px;
       font-size: 1.1em;
       color: #ccc;
+      text-align: center;
     }
 
-    /* Scanlines */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.02),
-        rgba(255, 255, 255, 0.02) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 9999;
+    .bet-display {
+      font-weight: bold;
+      color: #00ffd5;
+      background: #111;
+      border-radius: 5px;
+      padding: 5px 10px;
     }
 
     /* Navigatie neonstijl behouden */
@@ -112,6 +116,31 @@
 
     nav a:hover {
       background: #00bfae;
+    }
+
+    button {
+      background: #00ffd5;
+      color: black;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #00bfae;
+    }
+
+    .toggle-theme-btn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 10000;
+      padding: 5px 10px;
+      border-radius: 4px;
     }
   </style>
 </head>
@@ -131,6 +160,12 @@
     <section class="slot-machine-container">
       <h2>Speel & Win</h2>
 
+      <div class="slot-controls">
+        <button onclick="adjustBet(-1)">➖</button>
+        <div class="bet-display">Inzet: <span id="bet-amount">1</span> SOL</div>
+        <button onclick="adjustBet(1)">➕</button>
+      </div>
+
       <div class="slots">
         <div class="slot-cell">🍒</div>
         <div class="slot-cell">🍋</div>
@@ -147,19 +182,30 @@
   </main>
 
   <script>
+    let bet = 1;
+
+    function adjustBet(change) {
+      bet = Math.max(1, bet + change);
+      document.getElementById('bet-amount').textContent = bet;
+    }
+
     function spinSlots() {
       const symbols = ['🍒', '🍋', '🍇', '🔔', '💎', '⭐', '🔥'];
       const cells = document.querySelectorAll('.slot-cell');
       let result = [];
 
-      cells.forEach((cell, i) => {
+      cells.forEach(cell => {
         const symbol = symbols[Math.floor(Math.random() * symbols.length)];
         cell.textContent = symbol;
         result.push(symbol);
       });
 
       const win = result.every(symbol => symbol === result[0]);
-      document.getElementById('slot-result').textContent = win ? '🎉 JACKPOT!' : '❌ Geen winst';
+      const message = win
+        ? `🎉 JACKPOT! Je won ${bet * 10} SOL`
+        : `❌ Geen winst bij ${bet} SOL`;
+
+      document.getElementById('slot-result').textContent = message;
     }
 
     document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
