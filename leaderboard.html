@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏆 Leaderboard - Pump Raiders</title>
+  <link rel="stylesheet" href="css/airdrop.css" />
+</head>
+<body>
+  <!-- Scan Grid Background -->
+  <div class="scan-grid"></div>
+
+  <!-- Dark/Light Mode Toggle -->
+  <button class="toggle-theme-btn">🌗</button>
+
+  <header>🏆 Pump Raiders Leaderboard</header>
+
+  <main>
+    <div id="airdrop-leaderboard" class="airdrop-leaderboard-container terminal-glow"></div>
+  </main>
+
+  <script type="module">
+    import { CONFIG } from './js/config.js';
+    import { state, setUserWallet } from './js/state.js';
+    import { showLeaderboard } from './js/airdrop.js';
+
+    window.addEventListener('DOMContentLoaded', () => {
+      showLeaderboard(); // direct leaderboard tonen
+    });
+
+    document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
+  </script>
+</body>
+</html>
