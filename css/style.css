@@ -1,85 +1,113 @@
-/* css/style.css */
+/* css/style.css — Sci-Fi Neon Theme */
 
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-  font-family: Arial, sans-serif;
-  color: white;
+  font-family: 'Orbitron', Arial, sans-serif;
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #0d0d2b 100%);
+  color: #00ffd5;
   text-align: center;
+  overflow-x: hidden;
 }
 
 header {
-  padding: 20px;
-  background: #111;
+  padding: 25px;
+  background: #000;
   font-size: 2em;
   font-weight: bold;
   color: #00ffd5;
+  text-shadow: 0 0 10px #00ffd5, 0 0 20px #00ffd5;
+  border-bottom: 2px solid #00ffd5;
 }
 
 nav {
-  margin: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin: 25px 0;
 }
 
 nav a {
-  color: #fff;
+  color: #0ff;
+  background: #001f1f;
   text-decoration: none;
-  margin: 10px;
-  padding: 10px 20px;
-  background: #00ffd5;
-  border-radius: 5px;
+  padding: 12px 24px;
+  border: 2px solid #00ffd5;
+  border-radius: 6px;
   font-weight: bold;
-  transition: background 0.3s;
+  font-size: 1em;
+  box-shadow: 0 0 12px rgba(0, 255, 213, 0.3);
+  transition: all 0.3s ease;
 }
 
 nav a:hover {
-  background: #00bfae;
+  background: #00ffd5;
+  color: black;
+  box-shadow: 0 0 16px #00ffd5, 0 0 32px #00ffd5;
 }
 
 .card {
-  background: #222;
-  border: 2px solid #444;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #00ffd5;
   border-radius: 10px;
-  padding: 20px;
+  padding: 25px;
   margin: 40px auto;
   max-width: 500px;
+  box-shadow: 0 0 20px rgba(0, 255, 213, 0.2);
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 button {
-  background: #00ffd5;
+  background: linear-gradient(to right, #00ffd5, #00bfae);
   color: black;
   font-weight: bold;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.3s;
+  font-size: 1em;
+  box-shadow: 0 0 10px #00ffd5;
+  transition: background 0.3s, transform 0.2s;
 }
 
 button:hover {
-  background: #00bfae;
+  background: linear-gradient(to right, #00bfae, #00ffd5);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ffd5, 0 0 30px #00ffd5;
 }
 
 .slots {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
+  gap: 15px;
+  margin: 30px 0;
 }
 
 .slot-cell {
-  width: 60px;
-  height: 60px;
-  background: #000;
+  width: 70px;
+  height: 70px;
+  background: black;
   color: #00ffd5;
   font-size: 2em;
+  font-family: 'Courier New', Courier, monospace;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 5px;
-  border-radius: 10px;
-  border: 2px solid #444;
-  box-shadow: 0 0 10px #00ffd5aa;
+  border-radius: 12px;
+  border: 2px solid #00ffd5;
+  box-shadow: 0 0 12px #00ffd5aa;
+  animation: pulse-glow 2s infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 10px #00ffd5aa; }
+  100% { box-shadow: 0 0 20px #00ffd5; }
 }
 
 #slot-result,
@@ -88,8 +116,10 @@ button:hover {
 #live-balance {
   margin-top: 10px;
   font-size: 1.1em;
+  color: #ccfffa;
 }
-/* Glimmend effect */
+
+/* Glimmend effect bij winst */
 .glow {
   animation: glow-fade 2.5s ease-out forwards;
 }
@@ -103,4 +133,27 @@ button:hover {
     box-shadow: none;
     background-color: transparent;
   }
+}
+
+/* Neon grid scan achtergrond - optioneel */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    to right,
+    rgba(0, 255, 213, 0.05),
+    rgba(0, 255, 213, 0.05) 1px,
+    transparent 1px,
+    transparent 40px
+  ),
+  repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 213, 0.05),
+    rgba(0, 255, 213, 0.05) 1px,
+    transparent 1px,
+    transparent 40px
+  );
+  z-index: 0;
+  pointer-events: none;
 }
