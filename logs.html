@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Airdrop Logs</title>
+  <link rel="stylesheet" href="css/airdrop.css" />
+</head>
+<body>
+  <button class="toggle-theme-btn">🌗</button>
+
+  <header>
+    📜 Airdrop Logs
+  </header>
+
+  <main>
+    <section class="airdrop-log-container" id="airdrop-logs">
+      <!-- Logs worden hier dynamisch geladen -->
+    </section>
+  </main>
+
+  <script type="module">
+    import { showAirdropLogs } from './js/airdrop.js';
+    
+    // Laad direct de logs
+    showAirdropLogs();
+
+    // Dark/light theme toggle
+    document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
+  </script>
+</body>
+</html>
