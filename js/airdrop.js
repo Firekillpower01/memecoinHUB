@@ -16,16 +16,14 @@ export function claimAirdrop() {
 
   showTemporaryAlert(`🎉 ${CONFIG.AIRDROP_AMOUNT} ${CONFIG.TOKEN_NAME} geclaimd!`);
 
-  // Confetti animatie
   confetti({
     particleCount: 150,
     spread: 70,
     origin: { y: 0.6 }
   });
 
-  // Log en update visueel
   logAirdrop(state.userWallet, CONFIG.AIRDROP_AMOUNT);
-  showAirdropLogsAndLeaderboard(); // Eén duidelijke aanroep
+  showAirdropLogsAndLeaderboard();
 }
 
 // --- LOGGEN VAN AIRDROP ---
@@ -45,20 +43,25 @@ function showAirdropLogs() {
   const logDiv = document.getElementById("airdrop-logs");
   if (!logDiv) return;
 
-  logDiv.innerHTML = "<h3>📜 Airdrop Log</h3>";
+  logDiv.innerHTML = `<h3>📜 Airdrop Log</h3>`;
   logs.slice().reverse().forEach((log, i) => {
     const entry = document.createElement("div");
-    entry.className = "log-entry";
+    entry.className = "log-entry terminal-line";
+
     if (i === 0) {
-  entry.classList.add("glow");
-  setTimeout(() => entry.classList.remove("glow"), 2500); // verwijder glow na 2.5s
-}
- // nieuwste entry
-    entry.textContent = `${log.wallet.slice(0, 6)}... • ${log.amount} ${CONFIG.TOKEN_NAME} • ${new Date(log.timestamp).toLocaleString()}`;
+      entry.classList.add("glow");
+      setTimeout(() => entry.classList.remove("glow"), 2500);
+    }
+
+    entry.innerHTML = `
+      <span class="terminal-prefix">$</span> 
+      <span class="wallet">${log.wallet.slice(0, 6)}...</span>
+      <span class="amount">${log.amount} ${CONFIG.TOKEN_NAME}</span>
+      <span class="timestamp">${new Date(log.timestamp).toLocaleString()}</span>
+    `;
     logDiv.appendChild(entry);
   });
 }
-
 
 // --- LEADERBOARD TONEN ---
 function showLeaderboard() {
@@ -66,25 +69,17 @@ function showLeaderboard() {
   const leaderboardDiv = document.getElementById("airdrop-leaderboard");
   if (!leaderboardDiv) return;
 
-  // Bereken totaal per wallet
   const totals = {};
   logs.forEach(log => {
-    if (!totals[log.wallet]) totals[log.wallet] = 0;
-    totals[log.wallet] += log.amount;
+    totals[log.wallet] = (totals[log.wallet] || 0) + log.amount;
   });
 
-  // Sorteer en pak top 10
   const sorted = Object.entries(totals)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10);
 
-  // Bepaal nieuwe positie van huidige gebruiker
   const newIndex = sorted.findIndex(([wallet]) => wallet === state.userWallet);
-
-  // Vergelijk met vorige opgeslagen positie
   const previousIndex = parseInt(localStorage.getItem('leaderboardPosition') ?? "-1");
-
-  // Update opgeslagen positie
   localStorage.setItem('leaderboardPosition', newIndex);
 
   leaderboardDiv.innerHTML = "<h3>🏆 Leaderboard</h3>";
@@ -92,20 +87,21 @@ function showLeaderboard() {
     const entry = document.createElement("div");
     entry.className = "leaderboard-entry";
 
-    if (wallet === state.userWallet) {
-      if (newIndex !== previousIndex) {
-        entry.classList.add("glow");
-        setTimeout(() => entry.classList.remove("glow"), 2500);
-      }
+    if (wallet === state.userWallet && newIndex !== previousIndex) {
+      entry.classList.add("glow");
+      setTimeout(() => entry.classList.remove("glow"), 2500);
     }
 
-    entry.textContent = `#${i + 1} ${wallet.slice(0, 6)}... — ${amount} ${CONFIG.TOKEN_NAME}`;
+    entry.innerHTML = `
+      <span class="rank">#${i + 1}</span> 
+      <span class="wallet">${wallet.slice(0, 6)}...</span> 
+      <span class="amount">${amount} ${CONFIG.TOKEN_NAME}</span>
+    `;
     leaderboardDiv.appendChild(entry);
   });
 }
 
-
-// --- COMBINATIE: logs + leaderboard ---
+// --- COMBINATIE ---
 export function showAirdropLogsAndLeaderboard() {
   showAirdropLogs();
   showLeaderboard();
