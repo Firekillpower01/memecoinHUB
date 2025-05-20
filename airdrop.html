@@ -2,57 +2,56 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PUMP RAIDERS Airdrop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pump Raiders Airdrop</title>
   <link rel="stylesheet" href="css/airdrop.css" />
 </head>
-<body class="dark-mode"> <!-- standaard dark-mode -->
-
-  <!-- Dark/Light Theme Toggle -->
+<body>
   <button class="toggle-theme-btn">🌗</button>
 
-  <!-- Header -->
   <header>
-    CLAIM JE GRATIS AIRDROP
+    🎁 Claim je gratis Airdrop
   </header>
 
-  <!-- Navigation (optioneel) -->
   <nav>
-    <a href="index.html">🎰 Slot Game</a>
-    <a href="airdrop.html" class="active">🚀 Airdrop</a>
+    <a href="leaderboard.html">🏆 Leaderboard</a>
+    <a href="logs.html">📜 Logs</a>
   </nav>
 
   <main>
-    <section>
-      <p id="wallet-info">💳 Wallet niet verbonden</p>
-      <button id="connect-wallet-btn">🔌 Verbind Phantom</button>
-      <button id="claim-airdrop-btn" class="glitch-btn">🎁 Claim Airdrop</button>
-      <div id="airdrop-message"></div>
-      <div id="live-balance"></div>
+    <div id="wallet-info">⚠️ Geen wallet verbonden</div>
+    
+    <button onclick="connectPhantom()">🔌 Verbind Wallet</button>
+    <button onclick="claimAirdrop()">🚀 Claim Airdrop</button>
+    
+    <div id="airdrop-message"></div>
+
+    <section class="airdrop-log-container" id="airdrop-logs">
+      <!-- Logs komen hier -->
     </section>
 
-    <section class="airdrop-log-container">
-      <div id="airdrop-logs"></div>
-    </section>
-
-    <section class="airdrop-leaderboard-container">
-      <div id="airdrop-leaderboard"></div>
+    <section class="airdrop-leaderboard-container" id="airdrop-leaderboard">
+      <!-- Leaderboard komt hier -->
     </section>
   </main>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script type="module" src="./js/main.js"></script>
-  <script type="module" src="./js/airdrop.js"></script>
-  <script type="module" src="./js/ui.js"></script>
+  <!-- Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
-  <script>
-    document.getElementById("connect-wallet-btn").addEventListener("click", () => {
-      import('./js/main.js').then(mod => mod.connectPhantom());
-    });
+  <!-- Modules -->
+  <script type="module">
+    import { connectPhantom } from './js/main.js';
+    import { claimAirdrop, showAirdropLogsAndLeaderboard } from './js/airdrop.js';
 
-    document.getElementById("claim-airdrop-btn").addEventListener("click", () => {
-      import('./js/airdrop.js').then(mod => mod.claimAirdrop());
+    window.connectPhantom = connectPhantom;
+    window.claimAirdrop = claimAirdrop;
+
+    // Init logs + leaderboard
+    showAirdropLogsAndLeaderboard();
+
+    // Dark/light theme toggle
+    document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
     });
   </script>
 </body>
