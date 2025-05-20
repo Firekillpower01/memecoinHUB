@@ -2,42 +2,51 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pump Raiders Airdrop</title>
-  <link rel="stylesheet" href="css/airdrop.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎁 Pump Raiders Airdrop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <button class="toggle-theme-btn">🌗</button>
+  <!-- Dark/Light mode toggle -->
+  <button class="toggle-theme-btn" title="Toggle Light/Dark Mode">🌗</button>
 
-  <header>
-    🎁 Claim je gratis Airdrop
-  </header>
+  <!-- Header -->
+  <header>🎁 Claim je gratis Airdrop</header>
 
-  <nav class="site-nav">
-  <a href="airdrop.html">🎁 Claim</a>
-  <a href="leaderboard.html">🏆 Leaderboard</a>
-  <a href="logs.html">📜 Logs</a>
-</nav>
+  <!-- Navigatie -->
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="mint.html">🪙 Mint</a>
+    <a href="slots.html">🎰 Slot</a>
+    <a href="submit-token.html">📬 Submit</a>
+  </nav>
 
-
+  <!-- Main Airdrop Content -->
   <main>
-    <div id="wallet-info">⚠️ Geen wallet verbonden</div>
-    
-    <button onclick="connectPhantom()">🔌 Verbind Wallet</button>
-    <button onclick="claimAirdrop()">🚀 Claim Airdrop</button>
-    
-    <div id="airdrop-message"></div>
-
-    <section class="airdrop-log-container" id="airdrop-logs">
-      <!-- Logs komen hier -->
+    <section class="card">
+      <p id="wallet-info">⚠️ Geen wallet verbonden</p>
+      <button onclick="connectPhantom()">🔌 Verbind Wallet</button>
+      <button onclick="claimAirdrop()">🚀 Claim Airdrop</button>
+      <div id="airdrop-message" style="margin-top: 15px;"></div>
     </section>
 
-    <section class="airdrop-leaderboard-container" id="airdrop-leaderboard">
-      <!-- Leaderboard komt hier -->
+    <section class="card">
+      <h3>📜 Laatste Airdrops</h3>
+      <div class="airdrop-log-container" id="airdrop-logs">
+        <!-- Live logs -->
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>🏆 Top MemeCoin Claimers</h3>
+      <div class="airdrop-leaderboard-container" id="airdrop-leaderboard">
+        <!-- Leaderboard -->
+      </div>
     </section>
   </main>
 
-  <!-- Confetti Library -->
+  <!-- Confetti effect -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
   <!-- Modules -->
@@ -48,10 +57,8 @@
     window.connectPhantom = connectPhantom;
     window.claimAirdrop = claimAirdrop;
 
-    // Init logs + leaderboard
     showAirdropLogsAndLeaderboard();
 
-    // Dark/light theme toggle
     document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
     });
