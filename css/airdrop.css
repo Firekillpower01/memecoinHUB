@@ -303,3 +303,106 @@ button.glitch {
     transform: translateX(0);
   }
 }
+/* Logboek-stijl */
+.log-entry {
+  font-family: 'Courier New', Courier, monospace;
+  background: rgba(0, 0, 0, 0.7);
+  color: #00ffd5;
+  border: 1px solid #00ffd599;
+  padding: 10px 15px;
+  margin: 10px auto;
+  max-width: 600px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #00ffd533;
+  backdrop-filter: blur(2px);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.log-entry:hover {
+  background: rgba(0, 255, 213, 0.1);
+  box-shadow: 0 0 10px #00ffd5aa;
+}
+
+/* Leaderboard stijl */
+.leaderboard-entry {
+  font-family: 'Courier New', Courier, monospace;
+  background: rgba(20, 20, 20, 0.75);
+  color: #ff44ff;
+  border: 1px solid #ff44ff77;
+  padding: 10px 20px;
+  margin: 8px auto;
+  max-width: 600px;
+  border-radius: 5px;
+  box-shadow: 0 0 8px #ff44ff44;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-shadow: 0 0 2px #ff44ff88;
+}
+
+.leaderboard-entry .rank {
+  font-weight: bold;
+  color: #ffaa00;
+}
+
+.leaderboard-entry .wallet {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.leaderboard-entry .score {
+  font-weight: bold;
+  color: #00ffd5;
+}
+
+/* Glitch animatie */
+.glitch {
+  animation: glitch 1.2s infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  20% {
+    transform: translate(1px, -1px);
+    opacity: 0.95;
+  }
+  40% {
+    transform: translate(-1px, 1px);
+    opacity: 0.98;
+  }
+  60% {
+    transform: translate(1px, 1px);
+    opacity: 0.96;
+  }
+  80% {
+    transform: translate(-1px, -1px);
+    opacity: 0.97;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Licht thema ondersteuning */
+body.light-mode .log-entry {
+  background: rgba(255, 255, 255, 0.85);
+  color: #003333;
+  border: 1px solid #00bfae;
+}
+
+body.light-mode .leaderboard-entry {
+  background: rgba(255, 255, 255, 0.9);
+  color: #220022;
+  border: 1px solid #ff44ff44;
+  box-shadow: 0 0 6px #ff44ff22;
+}
+
+body.light-mode .leaderboard-entry .score {
+  color: #009e8d;
+}
