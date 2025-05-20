@@ -18,3 +18,6 @@ export function connectPhantom() {
     alert("⚠️ Phantom Wallet niet gevonden.");
   }
 }
+document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+});
