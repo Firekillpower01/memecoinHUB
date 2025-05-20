@@ -3,47 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎁 Claim Airdrop</title>
+  <title>PUMP RAIDERS Airdrop</title>
   <link rel="stylesheet" href="css/airdrop.css" />
 </head>
-<body>
-  <button id="themeToggle" class="toggle-theme-btn">🌓 Thema wisselen</button>
+<body class="dark-mode"> <!-- standaard dark-mode -->
 
-  <header>🎁 Claim je gratis $MEME airdrop</header>
+  <!-- Dark/Light Theme Toggle -->
+  <button class="toggle-theme-btn">🌗</button>
 
+  <!-- Header -->
+  <header>
+    CLAIM JE GRATIS AIRDROP
+  </header>
+
+  <!-- Navigation (optioneel) -->
   <nav>
-    <a href="index.html">🏠 Home</a>
-    <a href="mint.html">🪙 Mint</a>
-    <a href="airdrop.html">🎁 Airdrops</a>
-    <a href="slots.html">🎰 Slots</a>
+    <a href="index.html">🎰 Slot Game</a>
+    <a href="airdrop.html" class="active">🚀 Airdrop</a>
   </nav>
 
   <main>
-    <button id="connect-btn">🔗 Connect Phantom</button>
-    <div id="wallet-info"></div>
-    <div id="live-balance"></div>
+    <section>
+      <p id="wallet-info">💳 Wallet niet verbonden</p>
+      <button id="connect-wallet-btn">🔌 Verbind Phantom</button>
+      <button id="claim-airdrop-btn" class="glitch-btn">🎁 Claim Airdrop</button>
+      <div id="airdrop-message"></div>
+      <div id="live-balance"></div>
+    </section>
 
-    <hr style="margin: 30px 0; border-color: #00ffd5;">
+    <section class="airdrop-log-container">
+      <div id="airdrop-logs"></div>
+    </section>
 
-    <button id="airdrop-btn">🎁 Claim 50 $MEME</button>
-    <div id="airdrop-message"></div>
-    <div id="airdrop-logs" class="airdrop-log-container"></div>
-    <div id="airdrop-leaderboard" class="airdrop-leaderboard-container"></div>
+    <section class="airdrop-leaderboard-container">
+      <div id="airdrop-leaderboard"></div>
+    </section>
   </main>
 
-  <!-- Confetti bibliotheek -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/airdrop.js"></script>
+  <script type="module" src="./js/ui.js"></script>
 
-  <!-- Hoofdscript -->
-  <script type="module">
-    import { connectPhantom } from './js/main.js';
-    import { claimAirdrop, showAirdropLogsAndLeaderboard } from './js/airdrop.js';
+  <script>
+    document.getElementById("connect-wallet-btn").addEventListener("click", () => {
+      import('./js/main.js').then(mod => mod.connectPhantom());
+    });
 
-    document.getElementById('connect-btn').addEventListener('click', connectPhantom);
-    document.getElementById('airdrop-btn').addEventListener('click', claimAirdrop);
-
-    // Toon logs en leaderboard bij laden
-    showAirdropLogsAndLeaderboard();
+    document.getElementById("claim-airdrop-btn").addEventListener("click", () => {
+      import('./js/airdrop.js').then(mod => mod.claimAirdrop());
+    });
   </script>
 </body>
 </html>
