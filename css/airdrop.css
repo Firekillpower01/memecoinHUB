@@ -213,3 +213,26 @@ button.glitch {
   50% { text-shadow: 0 2px #ff00ff, 0 -2px #00ffd5; }
   100% { text-shadow: 2px 2px #ff00ff, -2px -2px #00ffd5; }
 }
+.site-nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px 0;
+  background: #111;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  z-index: 999;
+}
+
+.site-nav a {
+  color: #00ffd5;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.site-nav a:hover {
+  background: #00ffd5;
+  color: #000;
+}
