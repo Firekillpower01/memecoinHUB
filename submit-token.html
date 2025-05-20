@@ -3,43 +3,144 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>📬 Submit MemeCoin</title>
+  <title>Submit MemeCoin</title>
   <link rel="stylesheet" href="css/airdrop.css" />
+  <style>
+    main {
+      display: grid;
+      place-items: center;
+      padding: 40px;
+    }
+
+    .submit-container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #00ffd5;
+      border-radius: 10px;
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 20px #00ffd5aa;
+      animation: glowBorder 2.5s infinite alternate;
+    }
+
+    @keyframes glowBorder {
+      0% {
+        box-shadow: 0 0 10px #00ffd5aa;
+      }
+      100% {
+        box-shadow: 0 0 25px #00ffd5ee;
+      }
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 20px;
+      display: block;
+      color: #00ffd5;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #444;
+      border-radius: 5px;
+      background: #111;
+      color: white;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #00ffd5;
+      color: black;
+      font-weight: bold;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #00bfae;
+    }
+
+    .confirmation {
+      margin-top: 20px;
+      color: #00ff88;
+      font-weight: bold;
+    }
+
+    /* Scanlines */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Navigatie in neonstijl behouden */
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 10px;
+      padding: 10px 20px;
+      background: #00ffd5;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background: #00bfae;
+    }
+  </style>
 </head>
 <body>
   <button class="toggle-theme-btn">🌗</button>
 
-  <header>📬 Submit je MemeCoin</header>
+  <header>📬 Submit MemeCoin</header>
 
-  <nav class="site-nav">
+  <nav>
     <a href="index.html">🏠 Home</a>
-    <a href="slots.html">🎰 Slots</a>
-    <a href="mint.html">🪙 Mint</a>
-    <a href="airdrop.html">🎁 Airdrop</a>
+    <a href="slots.html">🎰 Slot Game</a>
+    <a href="mint.html">🪙 Token Mint</a>
+    <a href="airdrop.html">🎁 Airdrops</a>
   </nav>
 
   <main>
-    <p>Dien jouw MemeCoin in om kans te maken op een feature op het platform.</p>
+    <section class="submit-container">
+      <h2>Dien jouw MemeCoin project in</h2>
+      <form id="submit-form">
+        <label for="project-name">Projectnaam</label>
+        <input type="text" id="project-name" name="project-name" required />
 
-    <form id="submit-form" class="sci-fi-form">
-      <label for="project-name">🪐 Projectnaam</label>
-      <input type="text" id="project-name" name="project-name" required />
+        <label for="mint-address">Mint Address</label>
+        <input type="text" id="mint-address" name="mint-address" required />
 
-      <label for="mint-address">🎯 Mint Address</label>
-      <input type="text" id="mint-address" name="mint-address" required />
+        <label for="website">Website (optioneel)</label>
+        <input type="url" id="website" name="website" />
 
-      <label for="website">🔗 Website (optioneel)</label>
-      <input type="url" id="website" name="website" />
+        <label for="description">Beschrijving</label>
+        <textarea id="description" name="description" rows="5" required></textarea>
 
-      <label for="description">📄 Beschrijving</label>
-      <textarea id="description" name="description" rows="5" required></textarea>
+        <button type="submit">✅ Verzenden</button>
+      </form>
 
-      <button type="submit" class="glitch-button">✅ Verzenden</button>
-    </form>
-
-    <div class="confirmation" id="confirmation-message" style="display: none;">
-      ✅ Dank je wel! Je project is succesvol ingediend.
-    </div>
+      <div class="confirmation" id="confirmation-message" style="display: none;">
+        ✅ Dank je wel! Je project is ontvangen.
+      </div>
+    </section>
   </main>
 
   <script>
