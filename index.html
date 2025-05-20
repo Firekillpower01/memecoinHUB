@@ -3,96 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MemeCoin Hub</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-      color: white;
-      text-align: center;
-    }
-
-    header {
-      padding: 30px;
-      background: #111;
-      font-size: 2em;
-      font-weight: bold;
-      color: #ffcc00;
-    }
-
-    nav {
-      margin: 20px;
-    }
-
-    nav a {
-      color: #fff;
-      text-decoration: none;
-      margin: 10px;
-      padding: 10px 20px;
-      background: #ffcc00;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      background: #ffaa00;
-    }
-
-    main {
-      padding: 40px;
-    }
-
-    .section {
-      margin: 30px auto;
-      max-width: 800px;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 10px;
-    }
-  </style>
+  <title>Pump Raiders Airdrop</title>
+  <link rel="stylesheet" href="css/airdrop.css" />
 </head>
 <body>
-  <header>MemeCoin Hub 🌐</header>
+  <!-- Dark/Light toggle knop -->
+  <button class="toggle-theme-btn">🌗</button>
 
+  <!-- Header -->
+  <header>🚀 Claim je gratis airdrop</header>
+
+  <!-- Navigatie (optioneel) -->
   <nav>
-    <a href="slots.html">🎰 Slot Game</a>
-    <a href="mint.html">🪙 Token Mint</a>
-    <a href="airdrop.html">🎁 Airdrops</a>
-    <a href="submit-token.html">📬 Submit MemeCoin</a>
+    <a href="#">Home</a>
+    <a href="#">Airdrop</a>
+    <a href="#">Leaderboard</a>
   </nav>
 
+  <!-- Main content -->
   <main>
-    <div class="section">
-      <h2>Welkom bij de MemeCoin Hub</h2>
-      <p>De plek voor het lanceren, promoten én spelen met je favoriete community coins.</p>
-    </div>
-    <div class="section">
-      <h3>Wat kun je hier doen?</h3>
-      <ul style="text-align: left; display: inline-block;">
-        <li>🎰 Speel casinogames en win coins</li>
-        <li>🪙 Mint je eigen coin via Solana</li>
-        <li>🎁 Organiseer of claim een airdrop</li>
-        <li>📬 Laat jouw meme coin project registreren</li>
-      </ul>
-    </div>
+    <p id="wallet-info">🔌 Verbind je wallet om te beginnen</p>
+    <button onclick="claimAirdrop()">🎁 Claim Airdrop</button>
+    <div id="airdrop-message"></div>
+
+    <!-- Logs en Leaderboard -->
+    <div class="airdrop-log-container" id="airdrop-logs"></div>
+    <div class="airdrop-leaderboard-container" id="airdrop-leaderboard"></div>
   </main>
+
+  <!-- Scripts -->
+  <script type="module" src="js/airdrop.js"></script>
+
+  <!-- Toggle light/dark functionaliteit -->
+  <script>
+    document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+    });
+  </script>
 </body>
 </html>
-<script>
-  const toggleBtn = document.getElementById("themeToggle");
-  toggleBtn.addEventListener("click", () => {
-    document.body.classList.toggle("light-mode");
-    localStorage.setItem("theme", document.body.classList.contains("light-mode") ? "light" : "dark");
-  });
-
-  // Theme behouden tussen reloads
-  window.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-      document.body.classList.add("light-mode");
-    }
-  });
-</script>
-
