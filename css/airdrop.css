@@ -1,37 +1,38 @@
-/* css/airdrop.css */
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Audiowide&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
 
 body {
-  font-family: 'Audiowide', 'Share Tech Mono', monospace;
+  font-family: 'Audiowide', 'Orbitron', monospace;
   background-color: #0d0d0d;
   color: #00ffd5;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
   transition: background-color 0.5s, color 0.5s;
-  background-image:
-    linear-gradient(#00ffd520 1px, transparent 1px),
-    linear-gradient(90deg, #00ffd520 1px, transparent 1px);
-  background-size: 40px 40px;
-  animation: pulseGrid 4s infinite alternate;
-}
-
-@keyframes pulseGrid {
-  0% {
-    background-color: #0d0d0d;
-    background-position: 0 0;
-    opacity: 0.8;
-  }
-  100% {
-    background-color: #0f0f0f;
-    background-position: 20px 20px;
-    opacity: 1;
-  }
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 213, 0.05) 0px,
+    rgba(0, 255, 213, 0.05) 1px,
+    transparent 1px,
+    transparent 10px
+  );
+  animation: gridPulse 4s infinite;
 }
 
 body.light-mode {
-  background-color: #f0f0f0;
-  color: #1a1a1a;
-  background-image: none;
+  background-color: #ffffff;
+  color: #111;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.05) 0px,
+    rgba(0, 0, 0, 0.05) 1px,
+    transparent 1px,
+    transparent 10px
+  );
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.6; }
 }
 
 header {
@@ -45,21 +46,6 @@ header {
   animation: glitch 1s infinite;
   z-index: 2;
   position: relative;
-}
-
-@keyframes glitch {
-  0%, 100% {
-    text-shadow: 2px 2px #ff00ff, -2px -2px #00ffd5;
-  }
-  25% {
-    text-shadow: -2px 0 #00ffd5, 2px 2px #ff00ff;
-  }
-  50% {
-    text-shadow: 0 2px #ff00ff, 0 -2px #00ffd5;
-  }
-  75% {
-    text-shadow: 1px -1px #ff00ff, -1px 1px #00ffd5;
-  }
 }
 
 nav {
@@ -78,37 +64,22 @@ nav a {
   font-weight: bold;
   position: relative;
   overflow: hidden;
+  transition: color 0.3s;
 }
 
 nav a::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 0, 255, 0.2),
-    transparent
-  );
-  animation: sweep 3s linear infinite;
-  z-index: 1;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #00ffd5, transparent);
+  transition: left 0.5s;
 }
 
-@keyframes sweep {
-  0% {
-    transform: translateX(-100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(45deg);
-  }
-}
-
-nav a:hover {
-  background: #00ffd5;
-  color: #000;
+nav a:hover::before {
+  left: 100%;
 }
 
 main {
@@ -125,53 +96,54 @@ button {
   padding: 12px 24px;
   margin: 10px 0;
   border-radius: 6px;
-  cursor: pointer;
   font-size: 1.1rem;
   font-weight: bold;
+  cursor: pointer;
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s;
+  z-index: 1;
+  text-transform: uppercase;
+  font-family: 'Audiowide', sans-serif;
 }
 
-button::before {
-  content: '';
+button::after {
+  content: "";
   position: absolute;
-  top: -2px;
-  left: -2px;
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  background: linear-gradient(45deg, #ff00ff, #00ffd5, #ff00ff);
-  animation: glitch-border 2s infinite;
-  z-index: 0;
-  mix-blend-mode: screen;
-  opacity: 0.3;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, #ff00ff80, transparent);
+  transition: left 0.5s;
+  z-index: -1;
 }
 
-@keyframes glitch-border {
-  0% {
-    transform: translate(0, 0);
-  }
-  33% {
-    transform: translate(2px, -2px);
-  }
-  66% {
-    transform: translate(-2px, 2px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
+button:hover::after {
+  left: 100%;
 }
 
 button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px #00ffd5;
+  box-shadow: 0 0 12px #00ffd5, 0 0 25px #ff00ff;
+  color: #000;
+}
+
+button.glitch {
+  animation: glitchBtn 1s infinite;
+}
+
+@keyframes glitchBtn {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(3px, -1px); }
+  60% { transform: translate(-1px, 2px); }
+  80% { transform: translate(1px, -1px); }
+  100% { transform: translate(0, 0); }
 }
 
 .toggle-theme-btn {
   position: fixed;
   top: 15px;
   right: 15px;
-  z-index: 1000;
   background: transparent;
   border: 2px solid #00ffd5;
   color: #00ffd5;
@@ -179,6 +151,7 @@ button:hover {
   border-radius: 4px;
   font-family: 'Audiowide', sans-serif;
   cursor: pointer;
+  z-index: 1000;
 }
 
 .toggle-theme-btn:hover {
@@ -197,13 +170,13 @@ button:hover {
 .airdrop-leaderboard-container {
   margin-top: 30px;
   text-align: left;
-  background: #000;
+  background: #000000;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px #00ffd5;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.95rem;
-  color: #00ff88;
+  box-shadow: inset 0 0 10px #00ffd5;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #00ff00;
   border: 1px solid #00ffd5;
 }
 
@@ -211,29 +184,17 @@ button:hover {
 .leaderboard-entry {
   margin-bottom: 8px;
   padding: 6px 12px;
-  background: #050505;
+  background: #1a1a1a;
   border-left: 4px solid #00ffd5;
   border-radius: 4px;
-  transition: background 0.3s;
 }
 
 .log-entry.glow,
 .leaderboard-entry.glow {
   background: #290033;
   box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffd5;
-  animation: fadeGlow 2.5s forwards;
 }
 
-@keyframes fadeGlow {
-  0% {
-    box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffd5;
-  }
-  100% {
-    box-shadow: none;
-  }
-}
-
-/* Neon-border voor top 3 */
 .leaderboard-entry:nth-child(1),
 .leaderboard-entry:nth-child(2),
 .leaderboard-entry:nth-child(3) {
@@ -242,10 +203,13 @@ button:hover {
 }
 
 @keyframes pulseBorder {
-  0% {
-    box-shadow: 0 0 5px #ff00ff;
-  }
-  100% {
-    box-shadow: 0 0 20px #ff00ff;
-  }
+  0% { box-shadow: 0 0 5px #ff00ff; }
+  100% { box-shadow: 0 0 20px #ff00ff; }
+}
+
+@keyframes glitch {
+  0% { text-shadow: 2px 2px #ff00ff, -2px -2px #00ffd5; }
+  25% { text-shadow: -2px 0 #00ffd5, 2px 2px #ff00ff; }
+  50% { text-shadow: 0 2px #ff00ff, 0 -2px #00ffd5; }
+  100% { text-shadow: 2px 2px #ff00ff, -2px -2px #00ffd5; }
 }
