@@ -1,104 +1,204 @@
-// js/slots.js
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Slot Game | Pump Raiders</title>
+  <link rel="stylesheet" href="css/airdrop.css" />
+  <style>
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.03),
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
 
-// 🎰 Slot Configuratie
-const symbols = ['🍒', '🍋', '🍉', '🔔', '⭐', '💎', '7️⃣', '🃏']; // 🃏 = Wild
-const rows = 3;
-const cols = 5;
-const spinDuration = 800;
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 10px;
+      padding: 10px 20px;
+      background: #00ffd5;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
 
-// 🎯 DOM-elementen
-const reels = document.querySelectorAll('.reel');
-const spinButton = document.getElementById('spin-button');
-const slotMessage = document.getElementById('slot-message');
-const betDisplay = document.getElementById('bet-amount');
+    nav a:hover {
+      background: #00bfae;
+    }
 
-// Inzet
-let currentBet = 1;
+    main {
+      display: grid;
+      place-items: center;
+      padding: 40px;
+    }
 
-// 🧠 Willekeurig symbool
-function getRandomSymbol() {
-  return symbols[Math.floor(Math.random() * symbols.length)];
-}
+    .slot-machine-container {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #00ffd5;
+      border-radius: 12px;
+      padding: 30px;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 15px #00ffd5cc;
+      animation: pulseGlow 2s ease-in-out infinite alternate;
+    }
 
-// 🌟 Highlight winnende symbolen
-function highlightWinningSymbols(indices) {
-  indices.forEach(index => {
-    reels[index].classList.add('win-glow');
-  });
-}
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 10px #00ffd5aa; }
+      100% { box-shadow: 0 0 25px #00ffd5ee; }
+    }
 
-// ❌ Reset highlight
-function resetHighlights() {
-  reels.forEach(reel => reel.classList.remove('win-glow'));
-}
+    .reels-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 60px);
+      grid-template-rows: repeat(3, 60px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
 
-// 🎰 Spin-functie
-function spinReels() {
-  resetHighlights();
-  spinButton.disabled = true;
+    .reel {
+      background: black;
+      color: #00ffd5;
+      font-size: 2rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #333;
+      box-shadow: 0 0 10px #00ffd5aa;
+      transition: transform 0.3s ease;
+    }
 
-  reels.forEach(reel => {
-    reel.classList.add('spin');
-  });
+    .spin {
+      animation: spinReel 0.6s ease-in-out;
+    }
 
-  setTimeout(() => {
-    reels.forEach(reel => {
-      reel.textContent = getRandomSymbol();
-      reel.classList.remove('spin');
+    @keyframes spinReel {
+      0% { transform: rotateX(0deg); }
+      50% { transform: rotateX(180deg); }
+      100% { transform: rotateX(360deg); }
+    }
+
+    .win-glow {
+      box-shadow: 0 0 15px #00ff88, 0 0 30px #00ff88;
+      border-color: #00ff88;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .controls input {
+      width: 80px;
+      padding: 5px;
+      font-size: 1em;
+      text-align: right;
+    }
+
+    button {
+      background: #00ffd5;
+      color: black;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #00bfae;
+    }
+
+    #slot-message {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #fff;
+      text-align: center;
+    }
+
+    #wallet-info {
+      margin-top: 15px;
+      color: #ccc;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-theme-btn">🌗</button>
+
+  <header>🎰 Slot Game</header>
+
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="slots.html">🎰 Slot Game</a>
+    <a href="mint.html">🪙 Token Mint</a>
+    <a href="airdrop.html">🎁 Airdrops</a>
+  </nav>
+
+  <main>
+    <section class="slot-machine-container">
+      <h2>Speel & Win</h2>
+
+      <div class="reels-grid">
+        <!-- 15 reels (3 rijen × 5 kolommen) -->
+        <div class="reel"></div><div class="reel"></div><div class="reel"></div><div class="reel"></div><div class="reel"></div>
+        <div class="reel"></div><div class="reel"></div><div class="reel"></div><div class="reel"></div><div class="reel"></div>
+        <div class="reel"></div><div class="reel"></div><div class="reel"></div><div class="reel"></div><div class="reel"></div>
+      </div>
+
+      <div class="controls">
+        <button onclick="changeBet(-0.01)">➖</button>
+        <input type="number" id="bet-amount" step="0.01" min="0.01" value="0.01" />
+        <button onclick="changeBet(0.01)">➕</button>
+        <button id="spin-button">🎲 Spin</button>
+      </div>
+
+      <div id="slot-message">⬅️ Kies je inzet en druk op spin</div>
+    </section>
+
+    <div id="wallet-info">⚠️ Wallet niet verbonden</div>
+  </main>
+
+  <script type="module">
+    import { changeBet } from './js/slots.js';
+
+    document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
     });
 
-    checkWin();
-    spinButton.disabled = false;
-  }, spinDuration);
-}
+    // Live input synchronisatie
+    const input = document.getElementById('bet-amount');
+    input.addEventListener('change', () => {
+      const value = parseFloat(input.value);
+      if (!isNaN(value) && value >= 0.01) {
+        changeBet(0); // Alleen display bijwerken
+      } else {
+        input.value = 0.01;
+        changeBet(0);
+      }
+    });
 
-// 🏆 Wincontrole
-function checkWin() {
-  let hasWin = false;
-  const grid = Array.from(reels).map(reel => reel.textContent);
-
-  // Controleer per rij op match of wilds
-  for (let r = 0; r < rows; r++) {
-    const rowSymbols = [];
-    for (let c = 0; c < cols; c++) {
-      rowSymbols.push(grid[r * cols + c]);
-    }
-
-    const first = rowSymbols[0];
-    const isWild = (s) => s === '🃏';
-
-    const allSame = rowSymbols.every(s => s === first || isWild(s) || isWild(first));
-    if (allSame) {
-      hasWin = true;
-      const indices = Array.from({ length: cols }, (_, i) => r * cols + i);
-      highlightWinningSymbols(indices);
-    }
-  }
-
-  if (hasWin) {
-    slotMessage.textContent = `🎉 Je wint ${currentBet * 10} credits!`;
-    slotMessage.style.color = '#00ffd5';
-  } else {
-    slotMessage.textContent = '❌ Geen winst, probeer opnieuw!';
-    slotMessage.style.color = '#ff4d4d';
-  }
-}
-
-// 💸 Inzet aanpassen
-export function changeBet(amount) {
-  currentBet = Math.max(1, currentBet + amount);
-  if (betDisplay) betDisplay.textContent = currentBet;
-}
-
-// 🎮 Start
-document.addEventListener('DOMContentLoaded', () => {
-  reels.forEach(reel => {
-    reel.textContent = getRandomSymbol();
-  });
-
-  if (betDisplay) betDisplay.textContent = currentBet;
-  spinButton.addEventListener('click', () => {
-    slotMessage.textContent = '';
-    spinReels();
-  });
-});
+    window.changeBet = (delta) => {
+      const input = document.getElementById('bet-amount');
+      let current = parseFloat(input.value);
+      current = Math.max(0.01, parseFloat((current + delta).toFixed(2)));
+      input.value = current;
+    };
+  </script>
+</body>
+</html>
