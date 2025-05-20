@@ -236,3 +236,70 @@ button.glitch {
   background: #00ffd5;
   color: #000;
 }
+/* Airdrop Log Container */
+.airdrop-log-container {
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #00ffd5;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 15px #00ffd5aa;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Log items met terminal feel */
+.airdrop-log-container .log-entry {
+  color: #00ff99;
+  padding: 5px 0;
+  border-bottom: 1px dashed #00ffd555;
+  animation: terminal-fadein 0.4s ease-in;
+}
+
+/* Leaderboard Container */
+.airdrop-leaderboard-container {
+  background: rgba(15, 30, 40, 0.4);
+  border: 2px solid #ff00cc;
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #ff00cc88;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Leaderboard items */
+.leaderboard-entry {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #ff00cc33;
+  font-weight: bold;
+  color: #fff;
+  animation: terminal-fadein 0.4s ease-in;
+}
+
+.leaderboard-entry .rank {
+  color: #00ffd5;
+}
+.leaderboard-entry .wallet {
+  color: #fff;
+  text-shadow: 0 0 5px #00ffd5;
+}
+.leaderboard-entry .score {
+  color: #ff00cc;
+  text-shadow: 0 0 5px #ff00cc;
+}
+
+/* Terminal fade effect */
+@keyframes terminal-fadein {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
