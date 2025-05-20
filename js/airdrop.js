@@ -1,107 +1,99 @@
 // js/airdrop.js
 
-import { CONFIG } from './config.js';
 import { state } from './state.js';
-import { updateBalanceDisplay, showTemporaryAlert } from './ui.js';
+import { updateBalanceDisplay } from './ui.js';
 
-// --- AIRDROP CLAIM ---
 export function claimAirdrop() {
   if (!state.userWallet) {
-    alert("⚠️ Verbind eerst je wallet.");
+    document.getElementById("airdrop-message").textContent = "❌ Geen wallet verbonden.";
     return;
   }
 
-  state.memeBalance += CONFIG.AIRDROP_AMOUNT;
+  const amount = Math.floor(Math.random() * 10) + 1;
+  state.memeBalance += amount;
+
+  const message = `🎉 ${amount} $MEME geclaimd!`;
+  document.getElementById("airdrop-message").textContent = message;
+
+  confetti();
+  glowEffect(document.getElementById("airdrop-message"));
+  logAirdrop(state.userWallet, amount);
   updateBalanceDisplay();
-
-  showTemporaryAlert(`🎉 ${CONFIG.AIRDROP_AMOUNT} ${CONFIG.TOKEN_NAME} geclaimd!`);
-
-  confetti({
-    particleCount: 150,
-    spread: 70,
-    origin: { y: 0.6 }
-  });
-
-  logAirdrop(state.userWallet, CONFIG.AIRDROP_AMOUNT);
   showAirdropLogsAndLeaderboard();
 }
 
-// --- LOGGEN VAN AIRDROP ---
-function logAirdrop(wallet, amount) {
-  const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
-  logs.push({
+function glowEffect(element) {
+  element.classList.remove("glow");
+  void element.offsetWidth; // trigger reflow
+  element.classList.add("glow");
+}
+
+export function logAirdrop(wallet, amount) {
+  const logEntry = {
     wallet,
     amount,
     timestamp: new Date().toISOString()
-  });
-  localStorage.setItem('airdropLogs', JSON.stringify(logs));
+  };
+
+  let logs = JSON.parse(localStorage.getItem("airdropLogs") || "[]");
+  logs.unshift(logEntry);
+  logs = logs.slice(0, 25); // max 25 logs
+  localStorage.setItem("airdropLogs", JSON.stringify(logs));
 }
 
-// --- AIRDROP LOGS TONEN ---
-function showAirdropLogs() {
-  const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
-  const logDiv = document.getElementById("airdrop-logs");
-  if (!logDiv) return;
+export function showAirdropLogs() {
+  const container = document.getElementById("airdrop-logs");
+  if (!container) return;
 
-  logDiv.innerHTML = `<h3>📜 Airdrop Log</h3>`;
-  logs.slice().reverse().forEach((log, i) => {
-    const entry = document.createElement("div");
-    entry.className = "log-entry terminal-line";
+  const logs = JSON.parse(localStorage.getItem("airdropLogs") || "[]");
+  container.innerHTML = "<h3>📜 Recente Airdrops</h3>";
 
-    if (i === 0) {
-      entry.classList.add("glow");
-      setTimeout(() => entry.classList.remove("glow"), 2500);
-    }
-
-    entry.innerHTML = `
-      <span class="terminal-prefix">$</span> 
-      <span class="wallet">${log.wallet.slice(0, 6)}...</span>
-      <span class="amount">${log.amount} ${CONFIG.TOKEN_NAME}</span>
-      <span class="timestamp">${new Date(log.timestamp).toLocaleString()}</span>
+  const logHTML = logs.map(entry => {
+    const shortWallet = entry.wallet.slice(0, 4) + "..." + entry.wallet.slice(-4);
+    const time = new Date(entry.timestamp).toLocaleTimeString();
+    return `
+      <div class="log-entry glitch">
+        <span class="log-wallet">${shortWallet}</span> claimde 
+        <span class="log-amount">${entry.amount} $MEME</span> om <span class="log-time">${time}</span>
+      </div>
     `;
-    logDiv.appendChild(entry);
-  });
+  }).join("");
+
+  container.innerHTML += logHTML;
 }
 
-// --- LEADERBOARD TONEN ---
-function showLeaderboard() {
-  const logs = JSON.parse(localStorage.getItem('airdropLogs') || '[]');
-  const leaderboardDiv = document.getElementById("airdrop-leaderboard");
-  if (!leaderboardDiv) return;
+export function showLeaderboard() {
+  const container = document.getElementById("airdrop-leaderboard");
+  if (!container) return;
 
+  const logs = JSON.parse(localStorage.getItem("airdropLogs") || "[]");
   const totals = {};
-  logs.forEach(log => {
-    totals[log.wallet] = (totals[log.wallet] || 0) + log.amount;
+
+  logs.forEach(entry => {
+    if (!totals[entry.wallet]) totals[entry.wallet] = 0;
+    totals[entry.wallet] += entry.amount;
   });
 
   const sorted = Object.entries(totals)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 10);
 
-  const newIndex = sorted.findIndex(([wallet]) => wallet === state.userWallet);
-  const previousIndex = parseInt(localStorage.getItem('leaderboardPosition') ?? "-1");
-  localStorage.setItem('leaderboardPosition', newIndex);
+  container.innerHTML = "<h3>🏆 Leaderboard</h3>";
 
-  leaderboardDiv.innerHTML = "<h3>🏆 Leaderboard</h3>";
-  sorted.forEach(([wallet, amount], i) => {
-    const entry = document.createElement("div");
-    entry.className = "leaderboard-entry";
-
-    if (wallet === state.userWallet && newIndex !== previousIndex) {
-      entry.classList.add("glow");
-      setTimeout(() => entry.classList.remove("glow"), 2500);
-    }
-
-    entry.innerHTML = `
-      <span class="rank">#${i + 1}</span> 
-      <span class="wallet">${wallet.slice(0, 6)}...</span> 
-      <span class="amount">${amount} ${CONFIG.TOKEN_NAME}</span>
+  const leaderboardHTML = sorted.map(([wallet, total], index) => {
+    const shortWallet = wallet.slice(0, 4) + "..." + wallet.slice(-4);
+    return `
+      <div class="leaderboard-entry glitch">
+        <span class="rank">#${index + 1}</span>
+        <span class="wallet">${shortWallet}</span>
+        <span class="score">${total} $MEME</span>
+      </div>
     `;
-    leaderboardDiv.appendChild(entry);
-  });
+  }).join("");
+
+  container.innerHTML += leaderboardHTML;
 }
 
-// --- COMBINATIE ---
 export function showAirdropLogsAndLeaderboard() {
   showAirdropLogs();
   showLeaderboard();
