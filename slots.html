@@ -6,21 +6,6 @@
   <title>Slot Game | Pump Raiders</title>
   <link rel="stylesheet" href="css/airdrop.css" />
   <style>
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.02),
-        rgba(255, 255, 255, 0.02) 1px,
-        transparent 1px,
-        transparent 2px
-      );
-      pointer-events: none;
-      z-index: 9999;
-    }
-
     main {
       display: grid;
       place-items: center;
@@ -28,36 +13,32 @@
     }
 
     .slot-machine-container {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid #00ffd5;
       border-radius: 10px;
       padding: 30px;
-      max-width: 700px;
+      max-width: 800px;
       width: 100%;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(5px);
       box-shadow: 0 0 20px #00ffd5aa;
       animation: glowPulse 2s ease-in-out infinite alternate;
     }
 
     @keyframes glowPulse {
-      from {
-        box-shadow: 0 0 10px #00ffd5aa;
-      }
-      to {
-        box-shadow: 0 0 25px #00ffd5ee;
-      }
+      from { box-shadow: 0 0 10px #00ffd5aa; }
+      to   { box-shadow: 0 0 25px #00ffd5ee; }
     }
 
-    .slots {
-      display: flex;
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 60px);
+      grid-template-rows: repeat(3, 60px);
+      gap: 10px;
       justify-content: center;
-      margin: 30px 0;
+      margin: 20px 0;
     }
 
-    .slot-cell {
-      width: 60px;
-      height: 60px;
-      margin: 0 5px;
+    .reel {
       background: black;
       color: #00ffd5;
       font-size: 2em;
@@ -67,42 +48,55 @@
       border: 2px solid #444;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffd5aa;
+      transition: transform 0.3s;
     }
 
-    .slot-controls {
+    .reel.spin {
+      animation: spinReel 0.5s ease;
+    }
+
+    @keyframes spinReel {
+      0% { transform: scale(1.2) rotateX(180deg); }
+      100% { transform: scale(1) rotateX(0); }
+    }
+
+    .win {
+      animation: winFlash 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes winFlash {
+      0% { background-color: #00ff88; box-shadow: 0 0 10px #00ff88; }
+      100% { background-color: #111; box-shadow: 0 0 25px #00ff88; }
+    }
+
+    #slot-message {
+      margin-top: 10px;
+      font-size: 1.2em;
+    }
+
+    .bet-controls {
       display: flex;
       gap: 10px;
+      margin-top: 10px;
       justify-content: center;
-      margin-bottom: 20px;
     }
 
-    .slot-result {
-      margin-top: 20px;
+    button {
+      background: #00ffd5;
+      color: black;
       font-weight: bold;
-      color: #00ff88;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 10px 20px;
+      padding: 12px 24px;
+      border: none;
       border-radius: 5px;
-      font-family: 'Courier New', Courier, monospace;
-      box-shadow: inset 0 0 5px #00ff8855;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
     }
 
-    #wallet-info {
-      margin-top: 20px;
-      font-size: 1.1em;
-      color: #ccc;
-      text-align: center;
+    button:hover {
+      background: #00bfae;
     }
 
-    .bet-display {
-      font-weight: bold;
-      color: #00ffd5;
-      background: #111;
-      border-radius: 5px;
-      padding: 5px 10px;
-    }
-
-    /* Navigatie neonstijl behouden */
     nav a {
       color: #fff;
       text-decoration: none;
@@ -118,29 +112,19 @@
       background: #00bfae;
     }
 
-    button {
-      background: #00ffd5;
-      color: black;
-      font-weight: bold;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #00bfae;
-    }
-
-    .toggle-theme-btn {
+    body::before {
+      content: "";
       position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 10000;
-      padding: 5px 10px;
-      border-radius: 4px;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 9999;
     }
   </style>
 </head>
@@ -159,75 +143,40 @@
   <main>
     <section class="slot-machine-container">
       <h2>Speel & Win</h2>
-
-      <div class="slot-controls">
-        <button onclick="adjustBet(-1)">➖</button>
-        <div class="bet-display">Inzet: <span id="bet-amount">1</span> SOL</div>
-        <button onclick="adjustBet(1)">➕</button>
+      <div class="slots-grid" id="slots-grid">
+        <!-- 15 reels worden dynamisch toegevoegd -->
       </div>
-
-      <div class="slots">
-  <div class="slot-row">
-    <div class="slot-cell">🍒</div>
-    <div class="slot-cell">🍋</div>
-    <div class="slot-cell">🍇</div>
-    <div class="slot-cell">🔔</div>
-    <div class="slot-cell">💎</div>
-  </div>
-  <div class="slot-row">
-    <div class="slot-cell">🍋</div>
-    <div class="slot-cell">🍇</div>
-    <div class="slot-cell">💎</div>
-    <div class="slot-cell">🍒</div>
-    <div class="slot-cell">🔔</div>
-  </div>
-  <div class="slot-row">
-    <div class="slot-cell">🍇</div>
-    <div class="slot-cell">💎</div>
-    <div class="slot-cell">🍋</div>
-    <div class="slot-cell">🍇</div>
-    <div class="slot-cell">🍒</div>
-  </div>
-</div>
-
-
-      <button onclick="spinSlots()">🎲 Spin</button>
-      <div class="slot-result" id="slot-result">⬅️ Druk op spin</div>
+      <div class="bet-controls">
+        <button onclick="changeBet(-1)">➖</button>
+        <span id="bet-display">Inzet: 1</span>
+        <button onclick="changeBet(1)">➕</button>
+      </div>
+      <button id="spin-button">🎲 Spin</button>
+      <div id="slot-message">⬅️ Druk op spin</div>
     </section>
-
     <div id="wallet-info">⚠️ Wallet niet verbonden</div>
   </main>
 
+  <script type="module" src="js/slots.js"></script>
   <script>
-    let bet = 1;
-
-    function adjustBet(change) {
-      bet = Math.max(1, bet + change);
-      document.getElementById('bet-amount').textContent = bet;
-    }
-
-    function spinSlots() {
-      const symbols = ['🍒', '🍋', '🍇', '🔔', '💎', '⭐', '🔥'];
-      const cells = document.querySelectorAll('.slot-cell');
-      let result = [];
-
-      cells.forEach(cell => {
-        const symbol = symbols[Math.floor(Math.random() * symbols.length)];
-        cell.textContent = symbol;
-        result.push(symbol);
-      });
-
-      const win = result.every(symbol => symbol === result[0]);
-      const message = win
-        ? `🎉 JACKPOT! Je won ${bet * 10} SOL`
-        : `❌ Geen winst bij ${bet} SOL`;
-
-      document.getElementById('slot-result').textContent = message;
-    }
-
     document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
     });
+
+    // 15 reels genereren (3 rijen x 5 kolommen)
+    const grid = document.getElementById('slots-grid');
+    for (let i = 0; i < 15; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'reel';
+      grid.appendChild(cell);
+    }
+
+    // Inzet wijzigen
+    let bet = 1;
+    function changeBet(amount) {
+      bet = Math.max(1, bet + amount);
+      document.getElementById('bet-display').textContent = `Inzet: ${bet}`;
+    }
   </script>
 </body>
 </html>
