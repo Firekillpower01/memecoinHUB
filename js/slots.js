@@ -1,73 +1,66 @@
 // js/slots.js
 
-import { state } from './state.js';
-import { config } from './config.js';
-import { updateBalanceDisplay, showTemporaryAlert } from './ui.js';
+import { CONFIG } from './config.js';
+import { state, setUserWallet } from './state.js';
+import { updateBalanceDisplay } from './ui.js';
 
-const symbols = ["🍒", "🍋", "🔔", "⭐", "💎", "7️⃣", "🍀"];
-let isSpinning = false;
+// 🎛️ Slotmachine Configuratie
+const symbols = ['🍒', '🍋', '🍉', '🔔', '⭐', '💎', '7️⃣'];
+const spinDuration = 600; // in milliseconden
 
-export function spinSlots() {
-  if (isSpinning) return;
+// 🎯 DOM-elementen
+const reels = document.querySelectorAll('.reel');
+const spinButton = document.getElementById('spin-button');
+const slotMessage = document.getElementById('slot-message');
 
-  if (state.memeBalance < config.spinCost) {
-    showTemporaryAlert("❌ Niet genoeg $MEME tokens om te spinnen.");
-    return;
-  }
-
-  isSpinning = true;
-  state.memeBalance -= config.spinCost;
-  updateBalanceDisplay();
-
-  const reels = [
-    getRandomSymbol(),
-    getRandomSymbol(),
-    getRandomSymbol()
-  ];
-
-  updateReelsDisplay(reels);
-  animateReels([
-    document.getElementById("reel-0"),
-    document.getElementById("reel-1"),
-    document.getElementById("reel-2")
-  ]);
-
-  const isWin = reels.every(sym => sym === reels[0]);
-
-  setTimeout(() => {
-    if (isWin) {
-      const winnings = config.winReward;
-      state.memeBalance += winnings;
-      showTemporaryAlert(`🎉 Gewonnen! ${winnings} $MEME tokens!`);
-    } else {
-      showTemporaryAlert("😢 Geen winst, probeer opnieuw.");
-    }
-
-    updateBalanceDisplay();
-    isSpinning = false;
-  }, 600); // wacht tot animatie voorbij is
-}
-
+// 🧠 Hulpfunctie om een willekeurig symbool te selecteren
 function getRandomSymbol() {
-  const index = Math.floor(Math.random() * symbols.length);
-  return symbols[index];
+  return symbols[Math.floor(Math.random() * symbols.length)];
 }
 
-function updateReelsDisplay(reels) {
-  for (let i = 0; i < reels.length; i++) {
-    const reel = document.getElementById(`reel-${i}`);
-    if (reel) reel.textContent = reels[i];
+// 🎰 Functie om de slotmachine te laten draaien
+function spinReels() {
+  // Voeg animatieklasse toe aan elke reel
+  reels.forEach(reel => {
+    reel.classList.add('spin');
+  });
+
+  // Na de animatie, update de symbolen
+  setTimeout(() => {
+    reels.forEach(reel => {
+      reel.textContent = getRandomSymbol();
+      reel.classList.remove('spin');
+    });
+
+    // Controleer op winnende combinatie
+    checkWin();
+  }, spinDuration);
+}
+
+// 🏆 Functie om te controleren op een winnende combinatie
+function checkWin() {
+  const [symbol1, symbol2, symbol3] = Array.from(reels).map(reel => reel.textContent);
+
+  if (symbol1 === symbol2 && symbol2 === symbol3) {
+    slotMessage.textContent = `🎉 Gewonnen! Drie ${symbol1} in een rij!`;
+    slotMessage.style.color = '#00ffd5';
+    // Voeg hier logica toe voor beloningen of updates
+  } else {
+    slotMessage.textContent = '❌ Geen winst, probeer het opnieuw!';
+    slotMessage.style.color = '#ff4d4d';
   }
 }
 
-// Animatie voor draaiende reels
-function animateReels(reelElements) {
-  reelElements.forEach(reel => {
-    if (!reel) return;
-    reel.classList.add("spin");
+// 🎮 Eventlistener voor de spin-knop
+spinButton.addEventListener('click', () => {
+  slotMessage.textContent = '';
+  spinReels();
+});
 
-    setTimeout(() => {
-      reel.classList.remove("spin");
-    }, 600); // duur moet matchen met de CSS animatie
+// 🧪 Initialisatie (optioneel)
+document.addEventListener('DOMContentLoaded', () => {
+  // Stel initiële symbolen in
+  reels.forEach(reel => {
+    reel.textContent = getRandomSymbol();
   });
-}
+});
