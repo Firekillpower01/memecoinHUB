@@ -157,3 +157,22 @@ body::before {
   z-index: 0;
   pointer-events: none;
 }
+.slot-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.slot-cell.win {
+  animation: winGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes winGlow {
+  0% { box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; }
+  100% { box-shadow: 0 0 20px #ffffff, 0 0 30px #00ffcc; }
+}
+
+.slot-cell.wild {
+  color: magenta;
+  font-weight: bold;
+  text-shadow: 0 0 5px magenta;
+}
