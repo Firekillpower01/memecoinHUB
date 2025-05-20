@@ -1,50 +1,112 @@
-/* css/mint.css */
+/* css/mint.css — sci-fi versie */
 
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom, #1a2a3a, #243b55, #141e30);
-  color: white;
+  font-family: 'Share Tech Mono', monospace;
+  background-color: #0a0a0a;
+  color: #00ffd5;
   text-align: center;
+  overflow-x: hidden;
+  position: relative;
 }
 
+/* Scan grid achtergrond */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(0, 255, 213, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 255, 213, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  animation: pulseGrid 3s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes pulseGrid {
+  0%, 100% { opacity: 0.06; }
+  50% { opacity: 0.12; }
+}
+
+/* Header */
 header {
   padding: 20px;
-  background: #111;
   font-size: 2em;
   font-weight: bold;
   color: #00ffd5;
+  text-shadow: 0 0 8px #00ffd5;
+  z-index: 1;
+  position: relative;
 }
 
+/* Navigatie */
 nav {
   margin: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 nav a {
-  color: #fff;
+  color: #000;
+  background: linear-gradient(45deg, #00ffd5, #ff00ff);
   text-decoration: none;
   margin: 10px;
-  padding: 10px 20px;
-  background: #00ffd5;
+  padding: 12px 24px;
   border-radius: 5px;
   font-weight: bold;
-  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+nav a::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  animation: laserSweep 4s linear infinite;
+}
+
+@keyframes laserSweep {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
 }
 
 nav a:hover {
-  background: #00bfae;
+  box-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffd5;
+  background: #000;
+  color: #00ffd5;
 }
 
+/* Main container */
 main {
   max-width: 500px;
   margin: 40px auto;
   padding: 30px;
-  background: #222;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00ffd5;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 255, 213, 0.2);
+  box-shadow: 0 0 20px rgba(0, 255, 213, 0.2);
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 0.8s ease-out;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Buttons - glitch/laser stijl */
 button {
   background: #00ffd5;
   color: black;
@@ -54,15 +116,22 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  transition: background 0.3s;
+  position: relative;
+  transition: 0.3s;
+  z-index: 1;
 }
 
 button:hover {
-  background: #00bfae;
+  background: #ff00ff;
+  color: #000;
+  box-shadow: 0 0 10px #00ffd5, 0 0 20px #ff00ff;
 }
 
-#wallet-info, #live-balance {
+/* Wallet info */
+#wallet-info,
+#live-balance {
   margin-top: 15px;
   font-size: 1.1em;
   color: #eee;
+  text-shadow: 0 0 4px #00ffd5;
 }
