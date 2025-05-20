@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Submit MemeCoin</title>
+  <title>Submit Token | Pump Raiders</title>
   <link rel="stylesheet" href="css/airdrop.css" />
   <style>
     main {
@@ -12,42 +12,42 @@
       padding: 40px;
     }
 
-    .submit-container {
+    .token-submit-container {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid #00ffd5;
       border-radius: 10px;
       padding: 30px;
       max-width: 600px;
       width: 100%;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(6px);
       box-shadow: 0 0 20px #00ffd5aa;
-      animation: glowBorder 2.5s infinite alternate;
+      animation: glowPulse 2s ease-in-out infinite alternate;
     }
 
-    @keyframes glowBorder {
-      0% {
+    @keyframes glowPulse {
+      from {
         box-shadow: 0 0 10px #00ffd5aa;
       }
-      100% {
+      to {
         box-shadow: 0 0 25px #00ffd5ee;
       }
     }
 
     label {
-      font-weight: bold;
-      margin-top: 20px;
       display: block;
+      text-align: left;
+      margin-bottom: 10px;
       color: #00ffd5;
+      font-weight: bold;
     }
 
-    input, textarea {
+    input[type="text"] {
       width: 100%;
       padding: 10px;
-      border: 1px solid #444;
       border-radius: 5px;
+      border: 1px solid #444;
       background: #111;
-      color: white;
-      margin-top: 8px;
+      color: #fff;
       margin-bottom: 20px;
     }
 
@@ -67,13 +67,12 @@
       background: #00bfae;
     }
 
-    .confirmation {
-      margin-top: 20px;
+    .submission-status {
+      margin-top: 15px;
       color: #00ff88;
-      font-weight: bold;
     }
 
-    /* Scanlines */
+    /* Scanlines effect */
     body::before {
       content: "";
       position: fixed;
@@ -89,7 +88,7 @@
       z-index: 9999;
     }
 
-    /* Navigatie in neonstijl behouden */
+    /* Navigatie neonstijl behouden */
     nav a {
       color: #fff;
       text-decoration: none;
@@ -109,46 +108,46 @@
 <body>
   <button class="toggle-theme-btn">🌗</button>
 
-  <header>📬 Submit MemeCoin</header>
+  <header>📨 Submit Your Token</header>
 
   <nav>
     <a href="index.html">🏠 Home</a>
     <a href="slots.html">🎰 Slot Game</a>
-    <a href="mint.html">🪙 Token Mint</a>
+    <a href="mint.html">🪙 Mint</a>
     <a href="airdrop.html">🎁 Airdrops</a>
   </nav>
 
   <main>
-    <section class="submit-container">
-      <h2>Dien jouw MemeCoin project in</h2>
-      <form id="submit-form">
-        <label for="project-name">Projectnaam</label>
-        <input type="text" id="project-name" name="project-name" required />
+    <section class="token-submit-container">
+      <h2>Token Inzenden</h2>
+      <form id="submit-token-form" onsubmit="handleSubmit(event)">
+        <label for="token-name">Token Naam:</label>
+        <input type="text" id="token-name" required />
 
-        <label for="mint-address">Mint Address</label>
-        <input type="text" id="mint-address" name="mint-address" required />
+        <label for="token-address">Token Address:</label>
+        <input type="text" id="token-address" required />
 
-        <label for="website">Website (optioneel)</label>
-        <input type="url" id="website" name="website" />
-
-        <label for="description">Beschrijving</label>
-        <textarea id="description" name="description" rows="5" required></textarea>
-
-        <button type="submit">✅ Verzenden</button>
+        <button type="submit">🚀 Verstuur</button>
+        <div class="submission-status" id="submission-status"></div>
       </form>
-
-      <div class="confirmation" id="confirmation-message" style="display: none;">
-        ✅ Dank je wel! Je project is ontvangen.
-      </div>
     </section>
   </main>
 
   <script>
-    document.getElementById('submit-form').addEventListener('submit', function(event) {
+    function handleSubmit(event) {
       event.preventDefault();
-      document.getElementById('confirmation-message').style.display = 'block';
-      this.reset();
-    });
+
+      const name = document.getElementById('token-name').value;
+      const address = document.getElementById('token-address').value;
+
+      if (name && address) {
+        document.getElementById('submission-status').textContent =
+          `✅ Token "${name}" met address "${address}" is verzonden!`;
+      } else {
+        document.getElementById('submission-status').textContent =
+          `❌ Vul beide velden correct in.`;
+      }
+    }
 
     document.querySelector('.toggle-theme-btn').addEventListener('click', () => {
       document.body.classList.toggle('light-mode');
