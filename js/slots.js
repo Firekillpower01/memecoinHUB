@@ -51,6 +51,42 @@ function spinReels() {
     spinButton.disabled = false;
   }, spinDuration);
 }
+function checkWin() {
+  let hasWin = false;
+  let winAmount = 0;
+  const grid = Array.from(reels).map(reel => reel.textContent);
+  const result = grid;
+
+  for (let r = 0; r < rows; r++) {
+    const rowSymbols = [];
+    for (let c = 0; c < cols; c++) {
+      rowSymbols.push(grid[r * cols + c]);
+    }
+
+    const first = rowSymbols[0];
+    const isWild = (s) => s === '🃏';
+    const allSame = rowSymbols.every(s => s === first || isWild(s) || isWild(first));
+    
+    if (allSame) {
+      hasWin = true;
+      winAmount += currentBet * 10;
+      const indices = Array.from({ length: cols }, (_, i) => r * cols + i);
+      highlightWinningSymbols(indices);
+    }
+  }
+
+  if (hasWin) {
+    slotMessage.textContent = `🎉 Je wint ${winAmount} credits!`;
+    slotMessage.style.color = '#00ffd5';
+  } else {
+    slotMessage.textContent = '❌ Geen winst, probeer opnieuw!';
+    slotMessage.style.color = '#ff4d4d';
+  }
+
+  // 👉 Log de spin naar localStorage
+  logSpin(result, currentBet, winAmount);
+}
+
 
 // 🏆 Wincontrole
 function checkWin() {
