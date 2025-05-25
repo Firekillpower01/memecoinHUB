@@ -5,7 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pump Raiders Slot Game</title>
   <link rel="stylesheet" href="css/airdrop.css" />
-  <style>
+  <style> 
+    .spin-history-container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+#spin-history {
+  max-height: 200px;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #00ffd5;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  box-shadow: 0 0 10px #00ffd5aa;
+  font-size: 0.9em;
+}
+
+#spin-history.hidden {
+  display: none;
+}
+
+#spin-history div {
+  margin-bottom: 5px;
+  border-bottom: 1px dashed #00ffd5;
+  padding-bottom: 5px;
+}
+
     body::before {
       content: "";
       position: fixed;
