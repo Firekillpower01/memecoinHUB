@@ -102,3 +102,47 @@ document.addEventListener('DOMContentLoaded', () => {
     spinReels();
   });
 });
+// 📜 Log spin naar localStorage
+function logSpin(result, bet, winAmount) {
+  const history = JSON.parse(localStorage.getItem('spinhistory')) || [];
+  const entry = {
+    time: new Date().toLocaleString(),
+    result: result.join(''),
+    bet: bet,
+    win: winAmount
+  };
+  history.unshift(entry); // Nieuwste eerst
+  localStorage.setItem('spinhistory', JSON.stringify(history));
+}
+
+// 📜 Toon geschiedenis in UI
+function renderSpinHistory() {
+  const history = JSON.parse(localStorage.getItem('spinhistory')) || [];
+  const container = document.getElementById('spin-history');
+  container.innerHTML = '';
+
+  if (history.length === 0) {
+    container.innerHTML = '<div>Geen spins opgeslagen.</div>';
+    return;
+  }
+
+  history.forEach(entry => {
+    const div = document.createElement('div');
+    div.innerHTML = `⏰ ${entry.time} | 🎰 ${entry.result} | 🪙 Inzet: ${entry.bet} | 💰 Winst: ${entry.win}`;
+    container.appendChild(div);
+  });
+}
+
+// 📜 Toggle en reset event listeners
+document.getElementById('toggle-history-btn').addEventListener('click', () => {
+  const container = document.getElementById('spin-history');
+  container.classList.toggle('hidden');
+  renderSpinHistory();
+});
+
+document.getElementById('reset-history-btn').addEventListener('click', () => {
+  if (confirm('Weet je zeker dat je de spin-geschiedenis wilt wissen?')) {
+    localStorage.removeItem('spinhistory');
+    renderSpinHistory();
+  }
+});
