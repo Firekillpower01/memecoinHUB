@@ -65,12 +65,7 @@
       box-shadow: 0 0 20px #00ffd5aa;
       animation: glowPulse 2s ease-in-out infinite alternate;
     } 
-    <!-- 📜 Inzetgeschiedenis -->
-<section class="spin-history-container">
-  <button id="toggle-history-btn">📜 Toon Geschiedenis</button>
-  <button id="reset-history-btn">❌ Reset Geschiedenis</button>
-  <div id="spin-history" class="spin-history hidden"></div>
-</section>
+
 
 
     @keyframes glowPulse {
@@ -196,6 +191,13 @@
   </nav>
 
   <main>
+    <!-- 📜 Inzetgeschiedenis (verplaats dit naar NA de </main>) -->
+<section class="spin-history-container">
+  <button id="toggle-history-btn">📜 Toon Geschiedenis</button>
+  <button id="reset-history-btn">❌ Reset Geschiedenis</button>
+  <div id="spin-history" class="spin-history hidden"></div>
+</section>
+
     <section class="slot-machine-container">
       <div id="balance-display">💰 Balans: 1.00 SOL</div>
       <div id="bonus-spins" style="display:none">🌀 Bonus Spins: 10</div>
