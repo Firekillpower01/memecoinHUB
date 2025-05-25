@@ -136,6 +136,24 @@ document.addEventListener('DOMContentLoaded', () => {
   spinButton.addEventListener('click', () => {
     slotMessage.textContent = '';
     spinReels();
+    document.addEventListener('DOMContentLoaded', () => {
+  const gridContainer = document.getElementById('reels-grid');
+
+  // Genereer 5x5 = 25 reels
+  for (let i = 0; i < rows * cols; i++) {
+    const div = document.createElement('div');
+    div.classList.add('reel');
+    div.textContent = getRandomSymbol();
+    gridContainer.appendChild(div);
+  }
+
+  if (betDisplay) betDisplay.textContent = currentBet;
+  spinButton.addEventListener('click', () => {
+    slotMessage.textContent = '';
+    spinReels();
+  });
+});
+
   });
 });
 // 📜 Log spin naar localStorage
