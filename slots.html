@@ -5,33 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pump Raiders Slot Game</title>
   <link rel="stylesheet" href="css/airdrop.css" />
-  <style> 
+  <style>
+    /* --- Jouw bestaande CSS behouden --- */
     .spin-history-container {
-  margin-top: 30px;
-  text-align: center;
-}
+      margin-top: 30px;
+      text-align: center;
+    }
 
-#spin-history {
-  max-height: 200px;
-  overflow-y: auto;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid #00ffd5;
-  border-radius: 10px;
-  padding: 10px;
-  margin-top: 10px;
-  box-shadow: 0 0 10px #00ffd5aa;
-  font-size: 0.9em;
-}
+    #spin-history {
+      max-height: 200px;
+      overflow-y: auto;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #00ffd5;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+      box-shadow: 0 0 10px #00ffd5aa;
+      font-size: 0.9em;
+    }
 
-#spin-history.hidden {
-  display: none;
-}
+    #spin-history.hidden {
+      display: none;
+    }
 
-#spin-history div {
-  margin-bottom: 5px;
-  border-bottom: 1px dashed #00ffd5;
-  padding-bottom: 5px;
-}
+    #spin-history div {
+      margin-bottom: 5px;
+      border-bottom: 1px dashed #00ffd5;
+      padding-bottom: 5px;
+    }
 
     body::before {
       content: "";
@@ -64,9 +65,7 @@
       backdrop-filter: blur(5px);
       box-shadow: 0 0 20px #00ffd5aa;
       animation: glowPulse 2s ease-in-out infinite alternate;
-    } 
-
-
+    }
 
     @keyframes glowPulse {
       from { box-shadow: 0 0 10px #00ffd5aa; }
@@ -191,13 +190,6 @@
   </nav>
 
   <main>
-    <!-- 📜 Inzetgeschiedenis (verplaats dit naar NA de </main>) -->
-<section class="spin-history-container">
-  <button id="toggle-history-btn">📜 Toon Geschiedenis</button>
-  <button id="reset-history-btn">❌ Reset Geschiedenis</button>
-  <div id="spin-history" class="spin-history hidden"></div>
-</section>
-
     <section class="slot-machine-container">
       <div id="balance-display">💰 Balans: 1.00 SOL</div>
       <div id="bonus-spins" style="display:none">🌀 Bonus Spins: 10</div>
@@ -211,10 +203,18 @@
         <button id="spin-button">🎲 Spin</button>
         <button id="increase-bet">➕ Inzet</button>
         <button id="decrease-bet">➖ Inzet</button>
+        <span id="bet-amount" style="margin-left: 10px;">1</span>
         <input type="number" id="custom-bet" min="0.01" step="0.01" value="0.01" style="width:80px; margin-left:10px;">
       </div>
     </section>
   </main>
+
+  <!-- 📜 Inzetgeschiedenis (correct verplaatst NA main) -->
+  <section class="spin-history-container">
+    <button id="toggle-history-btn">📜 Toon Geschiedenis</button>
+    <button id="reset-history-btn">❌ Reset Geschiedenis</button>
+    <div id="spin-history" class="spin-history hidden"></div>
+  </section>
 
   <script type="module" src="js/slots.js"></script>
   <script>
