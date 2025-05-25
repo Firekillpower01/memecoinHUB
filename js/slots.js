@@ -6,14 +6,8 @@ const rows = 3;
 const cols = 5;
 const spinDuration = 800;
 
-// 🎯 DOM-elementen
-const reels = document.querySelectorAll('.reel');
-const spinButton = document.getElementById('spin-button');
-const slotMessage = document.getElementById('slot-message');
-const betDisplay = document.getElementById('bet-amount');
-
-// Inzet
 let currentBet = 1;
+let reels = []; // wordt pas gevuld na DOM geladen
 
 // 🧠 Willekeurig symbool
 function getRandomSymbol() {
@@ -51,11 +45,12 @@ function spinReels() {
     spinButton.disabled = false;
   }, spinDuration);
 }
+
+// 🏆 Wincontrole
 function checkWin() {
   let hasWin = false;
   let winAmount = 0;
   const grid = Array.from(reels).map(reel => reel.textContent);
-  const result = grid;
 
   for (let r = 0; r < rows; r++) {
     const rowSymbols = [];
@@ -66,7 +61,7 @@ function checkWin() {
     const first = rowSymbols[0];
     const isWild = (s) => s === '🃏';
     const allSame = rowSymbols.every(s => s === first || isWild(s) || isWild(first));
-    
+
     if (allSame) {
       hasWin = true;
       winAmount += currentBet * 10;
@@ -83,41 +78,7 @@ function checkWin() {
     slotMessage.style.color = '#ff4d4d';
   }
 
-  // 👉 Log de spin naar localStorage
-  logSpin(result, currentBet, winAmount);
-}
-
-
-// 🏆 Wincontrole
-function checkWin() {
-  let hasWin = false;
-  const grid = Array.from(reels).map(reel => reel.textContent);
-
-  // Controleer per rij op match of wilds
-  for (let r = 0; r < rows; r++) {
-    const rowSymbols = [];
-    for (let c = 0; c < cols; c++) {
-      rowSymbols.push(grid[r * cols + c]);
-    }
-
-    const first = rowSymbols[0];
-    const isWild = (s) => s === '🃏';
-
-    const allSame = rowSymbols.every(s => s === first || isWild(s) || isWild(first));
-    if (allSame) {
-      hasWin = true;
-      const indices = Array.from({ length: cols }, (_, i) => r * cols + i);
-      highlightWinningSymbols(indices);
-    }
-  }
-
-  if (hasWin) {
-    slotMessage.textContent = `🎉 Je wint ${currentBet * 10} credits!`;
-    slotMessage.style.color = '#00ffd5';
-  } else {
-    slotMessage.textContent = '❌ Geen winst, probeer opnieuw!';
-    slotMessage.style.color = '#ff4d4d';
-  }
+  logSpin(grid, currentBet, winAmount);
 }
 
 // 💸 Inzet aanpassen
@@ -126,36 +87,6 @@ export function changeBet(amount) {
   if (betDisplay) betDisplay.textContent = currentBet;
 }
 
-// 🎮 Start
-document.addEventListener('DOMContentLoaded', () => {
-  reels.forEach(reel => {
-    reel.textContent = getRandomSymbol();
-  });
-
-  if (betDisplay) betDisplay.textContent = currentBet;
-  spinButton.addEventListener('click', () => {
-    slotMessage.textContent = '';
-    spinReels();
-    document.addEventListener('DOMContentLoaded', () => {
-  const gridContainer = document.getElementById('reels-grid');
-
-  // Genereer 5x5 = 25 reels
-  for (let i = 0; i < rows * cols; i++) {
-    const div = document.createElement('div');
-    div.classList.add('reel');
-    div.textContent = getRandomSymbol();
-    gridContainer.appendChild(div);
-  }
-
-  if (betDisplay) betDisplay.textContent = currentBet;
-  spinButton.addEventListener('click', () => {
-    slotMessage.textContent = '';
-    spinReels();
-  });
-});
-
-  });
-});
 // 📜 Log spin naar localStorage
 function logSpin(result, bet, winAmount) {
   const history = JSON.parse(localStorage.getItem('spinhistory')) || [];
@@ -165,7 +96,7 @@ function logSpin(result, bet, winAmount) {
     bet: bet,
     win: winAmount
   };
-  history.unshift(entry); // Nieuwste eerst
+  history.unshift(entry);
   localStorage.setItem('spinhistory', JSON.stringify(history));
 }
 
@@ -187,7 +118,7 @@ function renderSpinHistory() {
   });
 }
 
-// 📜 Toggle en reset event listeners
+// 📜 Geschiedenisknoppen
 document.getElementById('toggle-history-btn').addEventListener('click', () => {
   const container = document.getElementById('spin-history');
   container.classList.toggle('hidden');
@@ -200,3 +131,35 @@ document.getElementById('reset-history-btn').addEventListener('click', () => {
     renderSpinHistory();
   }
 });
+
+// 🎮 Start bij DOM-load
+document.addEventListener('DOMContentLoaded', () => {
+  const gridContainer = document.getElementById('reels-grid');
+  const totalCells = rows * cols;
+
+  // Genereer grid dynamisch
+  for (let i = 0; i < totalCells; i++) {
+    const div = document.createElement('div');
+    div.classList.add('reel');
+    div.textContent = getRandomSymbol();
+    gridContainer.appendChild(div);
+  }
+
+  reels = document.querySelectorAll('.reel');
+
+  if (reels.length !== totalCells) {
+    console.warn(`⚠️ Verwacht ${totalCells} reels, maar kreeg er ${reels.length}`);
+  }
+
+  if (betDisplay) betDisplay.textContent = currentBet;
+
+  spinButton.addEventListener('click', () => {
+    slotMessage.textContent = '';
+    spinReels();
+  });
+});
+
+// 🎯 DOM-elementen (pas op na DOM-load gebruiken)
+const spinButton = document.getElementById('spin-button');
+const slotMessage = document.getElementById('slot-message');
+const betDisplay = document.getElementById('bet-amount');
